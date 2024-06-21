@@ -21,7 +21,7 @@ function virtualenv_prompt_info() {
 }
 
 PROMPT='
- %{$fg_bold[cyan]%}%~%{$reset_color%}$(git_prompt_info)$(virtualenv_prompt_info) %{$fg[blue]%}
+ %{$fg_bold[cyan]%}%~%{$reset_color%}$(git_prompt_info)$(virtualenv_prompt_info) %{$fg[magenta]%}
  ❯%{$reset_color%} '
 # ⌚ %{$fg_bold[red]%}%*%
 RPROMPT='$(ruby_prompt_info)'
