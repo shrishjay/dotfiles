@@ -138,10 +138,14 @@
 (require 'dired)
 
 ;; Org mode
+;; Org-bullets
+
 (use-package org-bullets
   :ensure t
   :config
   (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
+
+;; Org-superstar
 (use-package org-superstar
   :ensure t
   :config
@@ -154,6 +158,7 @@
   ;; Make leading bullets invisible
   (setq org-superstar-special-todo-items t)
   (add-hook 'org-mode-hook (lambda () (org-superstar-mode 1))))
+;; Size of the headings
 (custom-set-faces
   '(org-level-1 ((t (:inherit outline-1 :height 1.5 :weight bold))))
   '(org-level-2 ((t (:inherit outline-2 :height 1.2 :weight bold))))
@@ -170,13 +175,7 @@
 
 ;; mu4e
 (after! mu4e
-  (setq mu4e-            "** Appointments\n"
-            "- [ ] Appointment 1\n"
-            "- [ ] Appointment 2\n\n"
-            "** Notes\n"
-            "- Note 1\n"
-            "- Note 2\n\n"
-maildir "~/Maildir"
+  (setq mu4e-maildir "~/Maildir"
         mu4e-sent-folder "/[Gmail]/Sent Mail"
         mu4e-drafts-folder "/[Gmail]/Drafts"
         mu4e-trash-folder "/[Gmail]/Trash"
@@ -190,7 +189,6 @@ maildir "~/Maildir"
         mu4e-headers-skip-duplicates t
         mu4e-headers-auto-update t
         mu4e-compose-dont-reply-to-self t)
-
 
   ;; Define contexts for each account
   (setq mu4e-contexts
