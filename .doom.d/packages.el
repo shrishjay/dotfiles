@@ -60,3 +60,5 @@
 (package! mu4e-alert)
 (package! treemacs)
 (package! org-superstar)
+(package! lsp-latex)
+(package! org-fragtog)
