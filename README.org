@@ -1,2 +1,45 @@
 * My Configuration files
-** I use Hyprland on Arch Limux here are some of my configuration files
+*** I use Hyprland on Arch Linux, here are some of my configuration files
+** Installation
+To install my dotfiles on your linux system, it's preferable that you backup your own config files
+#+BEGIN_SRC bash
+mkdir -p ~/.config/alacritty_bkp
+mkdir -p ~/.config/hypr_bkp
+mkdir -p ~/.config/kitty_bkp
+mkdir -p ~/.config/nvim_bkp
+mkdir -p ~/.doom.d_bkp
+mkdir -p ~/.oh_my_zsh/themes_bkp
+
+cp ~/.config/alacritty ~/.config/alacritty_bkp
+cp ~/.config/hypr ~/.config/hypr_bkp
+cp ~/.config/kitty ~/.config/kitty_bkp
+cp ~/.config/nvim ~/.config/nvim_bkp
+cp ~/..doom.d ~/.doom.d_bkp
+cp ~/.oh-my-zsh/themes ~/.oh_my_zsh/themes_bkp
+#+END_SRC
+*** The preconfigurations I have used, special thanks and credits  for the respective developers
++ Neovim - Astronvim [[https://github.com/AstroNvim/AstroNvim]]
++ Emacs - Doom Emacs [[https://github.com/doomemacs/doomemacs]]
++ Hyprland - [[https://github.com/prasanthrangan/hyprdots]]
+ Although I have tweaked a bit the configuration files you can copy mine or customize them to your needs :)
+*** U can use the stow package to sync your config files to mine
+*** For Debian or Ubuntu based distros
+#+BEGIN_SRC bash
+sudo apt install stow
+#+END_SRC
+*** For Arch based distros
+#+BEGIN_SRC bash
+sudo pacman -S stow
+#+END_SRC
+*** For Red Hat based distros
+#+BEGIN_SRC bash
+sudo yum install stow
+# or if you have the dnf package manager
+sudo dnf install stow
+#+END_SRC
+*** Then you can sync your config files wih mine#+BEGIN_SRC bash
+Remember to backup your config files and directories and then delete the original one, otherwise stow will not work properly
+#+BEGIN_SRC bash
+cd dotfiles
+stow .
+#+END_SRC
