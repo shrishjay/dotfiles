@@ -37,7 +37,7 @@ sudo yum install stow
 # or if you have the dnf package manager
 sudo dnf install stow
 #+END_SRC
-*** Then you can sync your config files wih mine#+BEGIN_SRC bash
+*** Then you can sync your config files wih mine
 Remember to backup your config files and directories and then delete the original one, otherwise stow will not work properly
 #+BEGIN_SRC bash
 cd dotfiles
