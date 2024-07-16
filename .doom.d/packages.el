@@ -62,3 +62,5 @@
 (package! org-superstar)
 (package! lsp-latex)
 (package! org-fragtog)
+(package! dap-mode)
+(package! format-all)

@@ -33,6 +33,8 @@
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
 (setq doom-theme 'doom-one)
+(custom-set-faces!
+  '(font-lock-comment-face :foreground "#6D6D6D"))
 
 ;; Transparency
 (add-to-list 'default-frame-alist '(alpha-background . 80))
@@ -172,6 +174,9 @@
 ;; Enable org-pretty-entities for better math formatting
 (setq org-pretty-entities t)
 
+;; Ensure scheduled items appear in the agenda
+(setq org-agenda-span 'week) ;; or 'day, 'month, etc.
+
 ;; mu4e
 (after! mu4e
   (setq mu4e-maildir "~/Maildir"
@@ -252,3 +257,15 @@
       :desc "Toggle Treemacs"
       "ft" #'treemacs)
 
+;; Formatting code using format all
+;; Enable format-all-mode for all programming modes
+(use-package! format-all
+  :hook (prog-mode . format-all-mode))
+
+
+;; Optional: Automatically format buffer on save
+(use-package! format-all
+  :hook (prog-mode . format-all-ensure-formatter)
+  :config
+  (add-hook 'format-all-mode-hook 'format-all-ensure-formatter)
+  (setq format-all-format-on-save-mode t))
