@@ -64,3 +64,5 @@
 (package! org-fragtog)
 (package! dap-mode)
 (package! format-all)
+(package! jupyter)
+(package! ein)

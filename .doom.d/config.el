@@ -162,11 +162,11 @@
   (add-hook 'org-mode-hook (lambda () (org-superstar-mode 1))))
 ;; Size of the headings
 (custom-set-faces
-  '(org-level-1 ((t (:inherit outline-1 :height 1.5 :weight bold))))
-  '(org-level-2 ((t (:inherit outline-2 :height 1.2 :weight bold))))
-  '(org-level-3 ((t (:inherit outline-3 :height 1.0))))
-  '(org-level-4 ((t (:inherit outline-4 :height 0.8))))
-  '(org-level-5 ((t (:inherit outline-5 :height 0.6)))))
+ '(org-level-1 ((t (:inherit outline-1 :height 1.5 :weight bold))))
+ '(org-level-2 ((t (:inherit outline-2 :height 1.2 :weight bold))))
+ '(org-level-3 ((t (:inherit outline-3 :height 1.0))))
+ '(org-level-4 ((t (:inherit outline-4 :height 0.8))))
+ '(org-level-5 ((t (:inherit outline-5 :height 0.6)))))
 
 (after! org
   (setq org-directory "~/Org/")
@@ -269,3 +269,37 @@
   :config
   (add-hook 'format-all-mode-hook 'format-all-ensure-formatter)
   (setq format-all-format-on-save-mode t))
+
+;; Ensure the `jupyter` package is loaded
+(use-package! jupyter
+  :defer t
+  :init
+  (setq jupyter-repl-echo-eval-p t)
+  :config
+  (setq org-babel-default-header-args:jupyter-python '((:async . "yes")
+                                                       (:session . "py")
+                                                       (:kernel . "python3"))))
+
+;; Enable org-mode to handle .ipynb files
+(add-to-list 'auto-mode-alist '("\\.ipynb\\'" . org-mode))
+
+;; Configure org-mode to use Jupyter
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((python . t)
+   (jupyter . t)))
+
+;; Optional: Keybindings for ease of use
+(map! :leader
+      (:prefix ("j" . "jupyter")
+       :desc "Run cell" "r" #'jupyter-org-execute-src-block
+       :desc "Interrupt kernel" "i" #'jupyter-repl-interrupt-kernel
+       :desc "Restart kernel" "k" #'jupyter-repl-restart-kernel
+       :desc "Open console" "c" #'jupyter-repl-pop-to-buffer))
+
+;; Ensure the `ein` package is loaded
+;; ~/.doom.d/config.el
+
+
+;; Automatically open .ipynb files in EIN mode
+;;(add-to-list 'auto-mode-alist '("\\.ipynb\\'" . ein:notebook-mode))
