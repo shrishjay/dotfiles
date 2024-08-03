@@ -66,3 +66,4 @@
 (package! format-all)
 (package! jupyter)
 (package! ein)
+(package! centaur-tabs)

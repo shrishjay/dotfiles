@@ -32,12 +32,12 @@
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
-(setq doom-theme 'doom-one)
+(setq doom-theme 'doom-tokyo-night)
 (custom-set-faces!
   '(font-lock-comment-face :foreground "#6D6D6D"))
 
 ;; Transparency
-;;(add-to-list 'default-frame-alist '(alpha-background . 80))
+(add-to-list 'default-frame-alist '(alpha-background . 80))
 
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
@@ -297,63 +297,9 @@
        :desc "Restart kernel" "k" #'jupyter-repl-restart-kernel
        :desc "Open console" "c" #'jupyter-repl-pop-to-buffer))
 
-;; Adding code runner feature in vterm for python
-(defun run-python-file-in-vterm ()
-  "Run the current python file in vterm."
-  (interactive)
-  (let ((file (buffer-file-name)))
-    (vterm)
-    (vterm-send-string (format "python3 %s\n" file))))
+;; Ensure the `ein` package is loaded
+;; ~/.doom.d/config.el
 
-(map! :leader
-      :desc "Run Python file in vterm"
-      "m r" #'run-python-file-in-vterm)
 
-;; Java
-(use-package! lsp-mode
-  :commands lsp
-  :init
-  (setq lsp-keymap-prefix "C-c l")  ;; Or whatever prefix you prefer
-  :config
-  (lsp-enable-which-key-integration t))
-
-(use-package! lsp-java
-  :after lsp
-  :config
-  (add-hook 'java-mode-hook #'lsp))
-
-(require 'dap-mode)
-
-;; Enable DAP mode
-(dap-mode 1)
-(dap-ui-mode 1)
-
-;; Python specific configuration
-(require 'dap-python)
-(setq dap-python-executable "python") ; Set this to your Python executable if different
-;; Load and configure centaur-tabs
-(use-package! centaur-tabs
-  :demand
-  :config
-  (centaur-tabs-mode t)
-  (centaur-tabs-headline-match)
-  ;; Set the style and appearance of the tabs
-  (setq centaur-tabs-set-bar 'under
-        centaur-tabs-set-icons t
-        centaur-tabs-set-modified-marker t
-        centaur-tabs-show-navigation-buttons t
-        centaur-tabs-style "bar"
-        centaur-tabs-height 32
-        centaur-tabs-enable-key-bindings t
-        centaur-tabs-cycle-scope 'tabs
-        centaur-tabs-gray-out-icons 'buffer)
-  ;; Enable cycling through tabs with mouse wheel
-  (global-set-key (kbd "C-<next>") 'centaur-tabs-forward)
-  (global-set-key (kbd "C-<prior>") 'centaur-tabs-backward)
-  ;; Customize appearance
-  (setq centaur-tabs-set-close-button nil)
-  ;; Group buffers by project
-  (centaur-tabs-group-by-projectile-project))
-;; Optionally enable tab-bar-mode for Emacs 27+
-                                        ;  (when (version<= "27.0" emacs-version)
-                                        ;    (tab-bar-mode 1)))
+;; Automatically open .ipynb files in EIN mode
+;;(add-to-list 'auto-mode-alist '("\\.ipynb\\'" . ein:notebook-mode))
