@@ -332,21 +332,40 @@
 (setq dap-python-executable "python") ; Set this to your Python executable if different
                                         ;(use-package! centaur-tabs
 ;; Load and configure centaur-tabs
-;; (use-package! centaur-tabs
-;;   :demand
-;;   :config
-;;   (centaur-tabs-mode t)
-;;   (centaur-tabs-headline-match)
-;;   ;; Set the style and appearance of the tabs
-;;   (setq centaur-tabs-set-bar 'under
-;;         centaur-tabs-set-icons t
-;;         centaur-tabs-set-modified-marker t
-;;         centaur-tabs-show-navigation-buttons t
-;;         centaur-tabs-style "bar"
-;;         centaur-tabs-height 32
-;;         centaur-tabs-enable-key-bindings t
-;;         centaur-tabs-cycle-scope 'tabs
-;;         centaur-tabs-gray-out-icons 'buffer))
+(use-package! centaur-tabs
+  :demand
+  :config
+  (centaur-tabs-mode t)
+  (centaur-tabs-headline-match)
+  ;; Set the style and appearance of the tabs
+  (setq centaur-tabs-set-bar 'under
+        centaur-tabs-set-icons t
+        centaur-tabs-set-modified-marker t
+        centaur-tabs-show-navigation-buttons t
+        centaur-tabs-style "bar"
+        centaur-tabs-height 32
+        centaur-tabs-enable-key-bindings t
+        centaur-tabs-cycle-scope 'tabs
+        centaur-tabs-gray-out-icons 'buffer))
 ;;   ;; Enable cycling through tabs with keybindings
-;;   (global-set-key (kbd "C-<tab>") 'centaur-tabs-forward)
-;;   (global-set-key (kbd "C-S-<tab>") 'centaur-tabs-backward))
+(global-set-key (kbd "C-<tab>") 'centaur-tabs-forward)
+(global-set-key (kbd "C-S-<tab>") 'centaur-tabs-backward)
+
+;; Enabling sticky scrolling
+;; Enable Semantic
+(use-package! semantic
+  :config
+  (semantic-mode 1) ;; Enable Semantic mode globally
+  (global-semantic-idle-scheduler-mode 1)
+  (global-semantic-idle-completions-mode 1)
+  (global-semantic-idle-summary-mode 1)
+  (global-semantic-decoration-mode 1)
+  (global-semantic-highlight-func-mode 1)
+  (global-semantic-mru-bookmark-mode 1)
+  ;; Enable Sticky Function mode globally
+  (global-semantic-stickyfunc-mode 1)
+  ;; Optional: Customize the sticky classes
+  (setq semantic-stickyfunc-sticky-classes '(function type))
+  ;; Optional: Customize header line face for better visibility
+  (custom-set-faces
+   '(semantic-stickyfunc-indicator-face ((t (:background "gray20" :foreground "gold"))))))
