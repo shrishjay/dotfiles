@@ -67,3 +67,8 @@
 (package! jupyter)
 (package! ein)
 (package! centaur-tabs)
+(package! ess)
+(package! multiple-cursors)
+(package! org-mime)
+(package! catppuccin-theme
+  :recipe (:host github :repo "catppuccin/emacs"))

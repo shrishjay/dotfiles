@@ -96,7 +96,7 @@
        ein               ; tame Jupyter notebooks with emacs
        (eval +overlay)     ; run code, run (also, repls)
        lookup              ; navigate your code and its documentation
-       (lsp + eglot)       ; M-x vscode
+       (lsp + eglot +peek)       ; M-x vscode
        magit             ; a git porcelain for Emacs
        ;;make              ; run make tasks from Emacs
        ;;pass              ; password manager for nerds
@@ -137,7 +137,7 @@
        ;;elm               ; care for a cup of TEA?
        emacs-lisp        ; drown in parentheses
        ;;erlang            ; an elegant language for a more civilized age
-       ;;ess               ; emacs speaks statistics
+       (ess +lsp)               ; emacs speaks statistics
        ;;factor
        ;;faust             ; dsp, but you get to keep your soul
        ;;fortran           ; in FORTRAN, GOD is REAL (unless declared INTEGER)
@@ -162,7 +162,7 @@
        ;;nim               ; python + lisp at the speed of c
        ;;nix               ; I hereby declare "nix geht mehr!"
        ;;ocaml             ; an objective camel
-       (org +capture +roam)               ; organize your plain life in plain text
+       (org +capture +roam2)               ; organize your plain life in plain text
        ;;php               ; perl's insecure younger brother
        ;;plantuml          ; diagrams for confusing people more
        ;;purescript        ; javascript, but functional
@@ -204,5 +204,8 @@
        (default +bindings +smartparens))
 
 ;; Add MELPA repository to package archives
-(setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
-                         ("melpa" . "https://melpa.org/packages/")))
+(require 'doom-packages)
+(setq package-archives
+      '(("melpa" . "https://melpa.org/packages/")
+        ("gnu" . "https://elpa.gnu.org/packages/")
+        ("org" . "https://orgmode.org/elpa/")))

@@ -32,7 +32,9 @@
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
-(setq doom-theme 'doom-tokyo-night)
+(setq doom-theme 'catppuccin)
+(setq catppuccin-flavor 'mocha) ;; or 'latte', 'frappe', 'macchiato'
+
 (custom-set-faces!
   '(font-lock-comment-face :foreground "#6D6D6D"))
 
@@ -175,73 +177,192 @@
 
 ;; Ensure scheduled items appear in the agenda
 (setq org-agenda-span 'week) ;; or 'day, 'month, etc.
-
+;; Org roam
 ;; mu4e
-(after! mu4e
-  (setq mu4e-maildir "~/Maildir"
-        mu4e-sent-folder "/[Gmail]/Sent Mail"
-        mu4e-drafts-folder "/[Gmail]/Drafts"
-        mu4e-trash-folder "/[Gmail]/Trash"
-        mu4e-refile-folder "/[Gmail]/All Mail"
-        mu4e-get-mail-command "mbsync -a"
-        mu4e-update-interval 300
-        mu4e-compose-signature-auto-include nil
-        mu4e-view-show-images t
-        mu4e-view-show-addresses t
-        mu4e-use-fancy-chars t
-        mu4e-headers-skip-duplicates t
-        mu4e-headers-auto-update t
-        mu4e-compose-dont-reply-to-self t)
+(use-package org-roam
+  :ensure t
+  :init
+  (setq org-roam-v2-ack t)
+  :custom
+  (org-roam-directory "~/RoamNotes")
+  (org-roam-completion-everywhere t)
+  :bind (("C-c n l" . org-roam-buffer-toggle)
+         ("C-c n f" . org-roam-node-find)
+         ("C-c n i" . org-roam-node-insert)
+         :map org-mode-map
+         ("C-M-i" . completion-at-point)
+         :map org-roam-dailies-map
+         ("Y" . org-roam-dailies-capture-yesterday)
+         ("T" . org-roam-dailies-capture-tomorrow))
+  :bind-keymap
+  ("C-c n d" . org-roam-dailies-map)
+  :config
+  (require 'org-roam-dailies) ;; Ensure the keymap is available
+  (org-roam-db-autosync-mode))
+(require 'org-mime)
 
-  ;; Define contexts for each account
-  (setq mu4e-contexts
-        (list
-         (make-mu4e-context
-          :name "Gmail1"
-          :match-func (lambda (msg)
-                        (when msg
-                          (string-prefix-p "/gmail2004" (mu4e-message-field msg :maildir))))
-          :vars '((user-mail-address . "shrishjay2004@gmail.com")
-                  (user-full-name . "Shrishjay Acharya")
-                  (mu4e-sent-folder . "/gmail2004/[Gmail]/Sent Mail")
-                  (mu4e-drafts-folder . "/gmail2004/[Gmail]/Drafts")
-                  (mu4e-trash-folder . "/gmail2004/[Gmail]/Trash")
-                  (mu4e-refile-folder . "/gmail2004/[Gmail]/All Mail")
-                  (smtpmail-smtp-server . "smtp.gmail.com")
-                  (smtpmail-smtp-user . "shrishjay2004@gmail.com")
-                  (smtpmail-smtp-service . 587)
-                  (smtpmail-stream-type . starttls)))
+(add-to-list 'load-path "/usr/local/share/emacs/site-lisp/mu4e/")
 
-         (make-mu4e-context
-          :name "GmailIIT"
-          :match-func (lambda (msg)
-                        (when msg
-                          (string-prefix-p "/iitm" (mu4e-message-field msg :maildir))))
-          :vars '((user-mail-address . "24f1000722@ds.study.iitm.ac.in")
-                  (user-full-name . "Shrishjay Acharya")
-                  (mu4e-sent-folder . "/iitm/[Gmail]/Sent Mail")
-                  (mu4e-drafts-folder . "/iitm/[Gmail]/Drafts")
-                  (mu4e-trash-folder . "/iitm/[Gmail]/Trash")
-                  (mu4e-refile-folder . "/iitm/[Gmail]/All Mail")
-                  (smtpmail-smtp-server . "smtp.gmail.com")
-                  (smtpmail-smtp-user . "24f1000722@ds.study.iitm.ac.in")
-                  (smtpmail-smtp-service . 587)
-                  (smtpmail-stream-type . starttls)))))
+(use-package org
+  :ensure t)
+(require 'mu4e)
 
-  ;; Optional: Set default context (if desired)
-  (setq mu4e-context-policy 'pick-first)
-  (setq mu4e-compose-context-policy 'ask)
+(setq mu4e-maildir (expand-file-name "~/Maildir"))
 
-  ;; Enable mu4e alert notifications
-  (use-package! mu4e-alert
-    :config
-    (mu4e-alert-enable-mode-line-display)
-    (mu4e-alert-set-default-style 'notifications))
+                                        ; get mail
+(setq mu4e-get-mail-command "mbsync -c ~/.emacs.d/mu4e/.mbsyncrc -a"
+      ;; mu4e-html2text-command "w3m -T text/html" ;;using the default mu4e-shr2text
+      mu4e-view-prefer-html t
+      mu4e-update-interval 180
+      mu4e-headers-auto-update t
+      mu4e-compose-signature-auto-include nil
+      mu4e-compose-format-flowed t)
 
-  ;; Set up shortcuts for switching contexts (optional)
-  (global-set-key (kbd "C-c m 1") (lambda () (interactive) (mu4e-context-switch nil "gmail2004")))
-  (global-set-key (kbd "C-c m 2") (lambda () (interactive) (mu4e-context-switch nil "iitm"))))
+;; to view selected message in the browser, no signin, just html mail
+(add-to-list 'mu4e-view-actions
+             '("ViewInBrowser" . mu4e-action-view-in-browser) t)
 
+;; enable inline images
+(setq mu4e-view-show-images t)
+;; use imagemagick, if available
+(when (fboundp 'imagemagick-register-types)
+  (imagemagick-register-types))
+
+;; every new email composition gets its own frame!
+(setq mu4e-compose-in-new-frame t)
+
+;; don't save message to Sent Messages, IMAP takes care of this
+(setq mu4e-sent-messages-behavior 'delete)
+
+(add-hook 'mu4e-view-mode-hook #'visual-line-mode)
+
+;; <tab> to navigate to links, <RET> to open them in browser
+(add-hook 'mu4e-view-mode-hook
+          (lambda()
+            ;; try to emulate some of the eww key-bindings
+            (local-set-key (kbd "<RET>") 'mu4e~view-browse-url-from-binding)
+            (local-set-key (kbd "<tab>") 'shr-next-link)
+            (local-set-key (kbd "<backtab>") 'shr-previous-link)))
+
+;; from https://www.reddit.com/r/emacs/comments/bfsck6/mu4e_for_dummies/elgoumx
+(add-hook 'mu4e-headers-mode-hook
+          (defun my/mu4e-change-headers ()
+	    (interactive)
+	    (setq mu4e-headers-fields
+	          `((:human-date . 25) ;; alternatively, use :date
+		    (:flags . 6)
+		    (:from . 22)
+		    (:thread-subject . ,(- (window-body-width) 70)) ;; alternatively, use :subject
+		    (:size . 7)))))
+
+;; if you use date instead of human-date in the above, use this setting
+;; give me ISO(ish) format date-time stamps in the header list
+                                        ;(setq mu4e-headers-date-format "%Y-%m-%d %H:%M")
+
+;; spell check
+(add-hook 'mu4e-compose-mode-hook
+          (defun my-do-compose-stuff ()
+            "My settings for message composition."
+            (visual-line-mode)
+            (use-hard-newlines -1)
+            (flyspell-mode)))
+
+(require 'smtpmail)
+
+;;rename files when moving
+;;NEEDED FOR MBSYNC
+(setq mu4e-change-filenames-when-moving t)
+
+;;set up queue for offline email
+;;use mu mkdir  ~/Maildir/acc/queue to set up first
+(setq smtpmail-queue-mail nil)  ;; start in normal mode
+
+;;from the info manual
+(setq mu4e-attachment-dir  "~/Downloads")
+
+(setq message-kill-buffer-on-exit t)
+(setq mu4e-compose-dont-reply-to-self t)
+
+
+;; convert org mode to HTML automatically
+
+;;from vxlabs config
+;; show full addresses in view message (instead of just names)
+;; toggle per name with M-RET
+(setq mu4e-view-show-addresses 't)
+
+;; don't ask when quitting
+(setq mu4e-confirm-quit nil)
+
+;; mu4e-context
+(setq mu4e-context-policy 'pick-first)
+(setq mu4e-compose-context-policy 'always-ask)
+(setq mu4e-contexts
+      (list
+       (make-mu4e-context
+        :name "work" ;;for shrishjay2004
+        :enter-func (lambda () (mu4e-message "Entering context work"))
+        :leave-func (lambda () (mu4e-message "Leaving context work"))
+        :match-func (lambda (msg)
+		      (when msg
+		        (mu4e-message-contact-field-matches
+		         msg '(:from :to :cc :bcc) "shrishjay2004@gmail.com")))
+        :vars '((user-mail-address . "shrishjay2004@gmail.com")
+	        (user-full-name . "Shrishjay Acharya")
+	        (mu4e-sent-folder . "/shrishjay2004/[shrishjay2004].Sent Mail")
+	        (mu4e-drafts-folder . "/shrishjay2004/[shrishjay2004].drafts")
+	        (mu4e-trash-folder . "/shrishjay2004/[shrishjay2004].Trash")
+	        (mu4e-compose-signature . (concat "Formal Signature\n" "Emacs 25, org-mode 9, mu4e 1.0\n"))
+	        (mu4e-compose-format-flowed . t)
+	        (smtpmail-queue-dir . "~/Maildir/shrishjay2004/queue/cur")
+	        (message-send-mail-function . smtpmail-send-it)
+	        (smtpmail-smtp-user . "shrishjay2004")
+	        (smtpmail-starttls-credentials . (("smtp.gmail.com" 587 nil nil)))
+                                        ;(smtpmail-auth-credentials . (expand-file-name "~/.authinfo.gpg"))
+	        (smtpmail-default-smtp-server . "smtp.gmail.com")
+	        (smtpmail-smtp-server . "smtp.gmail.com")
+	        (smtpmail-smtp-service . 587)
+	        (smtpmail-debug-info . t)
+	        (smtpmail-debug-verbose . t)
+	        (mu4e-maildir-shortcuts . ( ("/shrishjay2004/INBOX"            . ?i)
+					    ("/shrishjay2004/[shrishjay2004].Sent Mail" . ?s)
+					    ("/shrishjay2004/[shrishjay2004].Bin"       . ?t)
+					    ("/shrishjay2004/[shrishjay2004].All Mail"  . ?a)
+					    ("/shrishjay2004/[shrishjay2004].Starred"   . ?r)
+					    ("/shrishjay2004/[shrishjay2004].drafts"    . ?d)
+					    ))))
+       (make-mu4e-context
+        :name "personal" ;;for iitm
+        :enter-func (lambda () (mu4e-message "Entering context personal"))
+        :leave-func (lambda () (mu4e-message "Leaving context personal"))
+        :match-func (lambda (msg)
+		      (when msg
+		        (mu4e-message-contact-field-matches
+		         msg '(:from :to :cc :bcc) "iitm@gmail.com")))
+        :vars '((user-mail-address . "iitm@gmail.com")
+	        (user-full-name . "Shrishjay Acharya(iitm)")
+	        (mu4e-sent-folder . "/iitm/[iitm].Sent Mail")
+	        (mu4e-drafts-folder . "/iitm/[iitm].drafts")
+	        (mu4e-trash-folder . "/iitm/[iitm].Trash")
+	        (mu4e-compose-signature . (concat "Informal Signature\n" "Emacs is awesome!\n"))
+	        (mu4e-compose-format-flowed . t)
+	        (smtpmail-queue-dir . "~/Maildir/iitm/queue/cur")
+	        (message-send-mail-function . smtpmail-send-it)
+	        (smtpmail-smtp-user . "iitm")
+	        (smtpmail-starttls-credentials . (("smtp.gmail.com" 587 nil nil)))
+                                        ;(smtpmail-auth-credentials . (expand-file-name "~/.authinfo.gpg"))
+	        (smtpmail-default-smtp-server . "smtp.gmail.com")
+	        (smtpmail-smtp-server . "smtp.gmail.com")
+	        (smtpmail-smtp-service . 587)
+	        (smtpmail-debug-info . t)
+	        (smtpmail-debug-verbose . t)
+	        (mu4e-maildir-shortcuts . ( ("/iitm/INBOX"            . ?i)
+					    ("/iitm/[iitm].Sent Mail" . ?s)
+					    ("/iitm/[iitm].Trash"     . ?t)
+					    ("/iitm/[iitm].All Mail"  . ?a)
+					    ("/iitm/[iitm].Starred"   . ?r)
+					    ("/iitm/[iitm].drafts"    . ?d)
+					    ))))))
 ;; Treemacs
 ;; ~/.doom.d/config.el
 
@@ -249,9 +370,6 @@
   :config
   (setq treemacs-width 35)  ; Set the width of the Treemacs window
   )
-
-;; Optionally, you can customize other aspects of Treemacs
-;; Bind a key to toggle Treemacs
 (map! :leader
       :desc "Toggle Treemacs"
       "ft" #'treemacs)
@@ -297,16 +415,16 @@
        :desc "Open console" "c" #'jupyter-repl-pop-to-buffer))
 
 ;; Adding code runner feature in vterm for python
-(defun run-python-file-in-vterm ()
-  "Run the current python file in vterm."
-  (interactive)
-  (let ((file (buffer-file-name)))
-    (vterm)
-    (vterm-send-string (format "python3 %s\n" file))))
+;; (defun run-python-file-in-vterm ()
+;;   "Run the current python file in vterm."
+;;   (interactive)
+;;   (let ((file (buffer-file-name)))
+;;     (vterm)
+;;     (vterm-send-string (format "python3 %s\n" file))))
 
-(map! :leader
-      :desc "Run Python file in vterm"
-      "m r" #'run-python-file-in-vterm)
+;; (map! :leader
+;;       :desc "Run Python file in vterm"
+;;       "m r" #'run-python-file-in-vterm)
 
 ;; Java
 (use-package! lsp-mode
@@ -369,3 +487,52 @@
   ;; Optional: Customize header line face for better visibility
   (custom-set-faces
    '(semantic-stickyfunc-indicator-face ((t (:background "gray20" :foreground "gold"))))))
+;; (use-package! vterm
+;;   :commands vterm
+;;   :config
+;;   (setq vterm-max-scrollback 10000))
+
+(defun my/run-code-in-vterm ()
+  "Run the current buffer's code in a vterm."
+  (interactive)
+  (let* ((file (buffer-file-name))
+         (buf (get-buffer-create "*vterm-run*"))
+         (cmd (cond
+               ((string-match "\\.py\\'" file) (format "python %s" file))
+               ((string-match "\\.c\\'" file) (format "gcc %s -o %s && ./%s" file (file-name-sans-extension file) (file-name-sans-extension file)))
+               ((string-match "\\.java\\'" file) (format "javac %s && java %s" file (file-name-sans-extension file)))
+               (t (read-string "Run command: ")))))
+    (with-current-buffer buf
+      (vterm-mode)
+      (vterm-send-string cmd)
+      (vterm-send-return))
+    (display-buffer buf)))
+
+(map! :leader
+      :desc "Run code in vterm" "r" #'my/run-code-in-vterm)
+
+;; MySQL
+;; SQL mode configuration
+(use-package! sql
+  :config
+  ;; Set default SQL program to MySQL
+  (setq sql-program "mysql")
+  (setq sql-product 'mysql)
+
+  ;; Define SQL connection settings
+  (setq sql-connection-alist
+        '((mysql (sql-product 'mysql)
+           (sql-login "root")
+           (sql-password "golimaar")  ;; Replace with your actual password
+           (sql-database "shrishjay_data")
+           (sql-port 3306)
+           (sql-server "localhost"))))
+
+  ;; Additional configurations if needed
+  (setq sql-mysql-program "mysql"))
+
+;; Add keybindings for multiple cursors
+(global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines)
+(global-set-key (kbd "C->") 'mc/mark-next-like-this)
+(global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
+(global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this)
