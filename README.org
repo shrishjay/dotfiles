@@ -18,9 +18,7 @@ cp ~/..doom.d ~/.doom.d_bkp
 cp ~/.oh-my-zsh/themes ~/.oh_my_zsh/themes_bkp
 #+END_SRC
 *** The preconfigurations I have used, special thanks and credits  for the respective developers
-+ Neovim - Astronvim [[https://github.com/AstroNvim/AstroNvim]]
 + Emacs - Doom Emacs [[https://github.com/doomemacs/doomemacs]]
-+ Hyprland - [[https://github.com/prasanthrangan/hyprdots]]
 **** Although I have tweaked a bit the configuration files you can copy mine or customize them to your needs :)
 *** U can use the stow package to sync your config files to mine
 *** For Debian or Ubuntu based distros
