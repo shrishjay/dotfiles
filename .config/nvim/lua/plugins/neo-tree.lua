@@ -13,6 +13,7 @@ return {
           enabled = true,
           leave_dirs_open = true,
         },
+        autochdir = true,
         hijack_netrw_behavior = "open_current",
         filtered_items = {
           visible = true, -- Show hidden files by default
