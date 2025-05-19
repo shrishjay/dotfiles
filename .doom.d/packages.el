@@ -3,7 +3,6 @@
 
 ;; To install a package with Doom you must declare them here and run 'doom sync'
 ;; on the command line, then restart Emacs for the changes to take effect -- or
-;; use 'M-x doom/reload'.
 
 
 ;; To install SOME-PACKAGE from MELPA, ELPA or emacsmirror:
@@ -48,27 +47,6 @@
 ;; (unpin! pinned-package another-pinned-package)
 ;; ...Or *all* packages (NOT RECOMMENDED; will likely break things)
 ;; (unpin! t)
-
-;; Installing pyright
-
-(package! lsp-mode)
-(package! lsp-pyright)
-(package! company)
-(package! flycheck)
-(package! org-bullets)
-(package! mu4e)
-(package! mu4e-alert)
-(package! treemacs)
+(package! catppuccin-theme)
 (package! org-superstar)
-(package! lsp-latex)
-(package! org-fragtog)
 (package! dap-mode)
-(package! format-all)
-(package! jupyter)
-(package! ein)
-(package! centaur-tabs)
-(package! ess)
-(package! multiple-cursors)
-(package! org-mime)
-(package! catppuccin-theme
-  :recipe (:host github :repo "catppuccin/emacs"))
