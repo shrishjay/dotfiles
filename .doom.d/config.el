@@ -21,9 +21,8 @@
 ;; See 'C-h v doom-font' for documentation and more examples of what they
 ;; accept. For example:
 ;;
-;;(setq doom-font (font-spec :family "Fira Code" :size 12 :weight 'semi-light)
-;;      doom-variable-pitch-font (font-spec :family "Fira Sans" :size 13))
-;;
+;; Font
+(setq doom-font (font-spec :family "JetBrainsMono Nerd Font" :size 15))
 ;; If you or Emacs can't find your font, use 'M-x describe-font' to look them
 ;; up, `M-x eval-region' to execute elisp code, and 'M-x doom/reload-font' to
 ;; refresh your font settings. If Emacs still can't find your font, it likely
@@ -35,7 +34,6 @@
 (setq doom-theme 'catppuccin)
 (setq catppuccin-flavor 'mocha) ; or 'frappe 'latte, 'macchiato, or 'mocha
     (load-theme 'catppuccin t)
-(custom-set-faces! '(default :height 120))
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
 (setq display-line-numbers-type 'relative)
@@ -76,6 +74,7 @@
 ;;
 ;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
 ;; they are implemented.
+;; Dired
 (use-package dired)
 ;; Company
 (add-hook 'eglot-managed-mode-hook
@@ -111,30 +110,19 @@
                                      :request "launch"
                                      :name "My App")))
 ;; Org mode
-;;Org-superstar
+(setq org-agenda-files '("~/org/agenda/"))
 (use-package org-superstar
   :ensure t
   :config
   ;; Define custom bullets for list items
   (setq org-superstar-item-bullet-alist '((?- . ?✦) (?+ . ?➤) (?* . ?•)))
-  ;; Enable more compact leading bullets
-  (setq org-superstar-leading-bullet "  ")
-  ;; Hide the leading stars on headlines
-  (setq org-superstar-leading-fallback ?\s)
   ;; Make leading bullets invisible
   (setq org-superstar-special-todo-items t)
   (add-hook 'org-mode-hook (lambda () (org-superstar-mode 1))))
 ;; Size of the headings
 (custom-set-faces
  '(org-level-1 ((t (:inherit outline-1 :height 1.5 :weight bold))))
- '(org-level-2 ((t (:inherit outline-2 :height 1.2 :weight bold))))
- '(org-level-3 ((t (:inherit outline-3 :height 1.0))))
- '(org-level-4 ((t (:inherit outline-4 :height 0.8))))
- '(org-level-5 ((t (:inherit outline-5 :height 0.6)))))
-
-(after! org
-  (setq org-directory "~/Org/")
-  (setq org-agenda-files '("~/Org/daily/")))
+ '(org-level-2 ((t (:inherit outline-2 :height 1.2 :weight bold)))))
 ;; ein
 (use-package! ein
   :config
@@ -152,7 +140,5 @@
 (map! :leader
       :desc "Toggle Treemacs"
       "ft" #'treemacs)
-
-
 ;; Auto close other projects when opening a new one
-(treemacs-project-follow-mode 1)
+;; (treemacs-project-follow-mode 1)
