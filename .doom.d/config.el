@@ -20,6 +20,7 @@
 ;;
 ;; See 'C-h v doom-font' for documentation and more examples of what they
 ;; accept. For example:
+
 ;;
 ;; Font
 (setq doom-font (font-spec :family "JetBrainsMono Nerd Font" :size 15))
@@ -140,5 +141,10 @@
 (map! :leader
       :desc "Toggle Treemacs"
       "ft" #'treemacs)
+(setq treemacs-show-hidden-files nil)
 ;; Auto close other projects when opening a new one
 ;; (treemacs-project-follow-mode 1)
+;; Searching files by fd
+(map! :leader
+      :desc "Find files (fd)"
+      "f z" #'consult-fd)
