@@ -143,7 +143,7 @@
       "ft" #'treemacs)
 (setq treemacs-show-hidden-files nil)
 ;; Auto close other projects when opening a new one
-;; (treemacs-project-follow-mode 1)
+; (treemacs-project-follow-mode 1)
 ;; Searching files by fd
 (map! :leader
       :desc "Find files (fd)"
