@@ -124,6 +124,7 @@
 (custom-set-faces
  '(org-level-1 ((t (:inherit outline-1 :height 1.3 :weight bold))))
  '(org-level-2 ((t (:inherit outline-2 :height 1.2 :weight bold)))))
+(setq org-hide-emphasis-markers t)
 ;; ein
 (use-package! ein
   :config
@@ -148,3 +149,12 @@
 (map! :leader
       :desc "Find files (fd)"
       "f z" #'consult-fd)
+
+;; PDF
+(after! pdf-tools
+  (map! :map pdf-view-mode-map
+        :n "C-=" #'pdf-view-enlarge
+        :n "C--" #'pdf-view-shrink
+        :n "C-0" #'pdf-view-scale-reset
+        :n "n"   #'pdf-view-next-page
+        :n "p"   #'pdf-view-previous-page))
