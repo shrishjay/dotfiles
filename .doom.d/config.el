@@ -1,11 +1,4 @@
-;;; $DOOMDIR/config.el -*- lexical-binding: t; -*-
-
-;; Place your private configuration here! Remember, you do not need to run 'doom
-;; sync' after modifying this file!
-
-
-;; Some functionality uses this to identify you, e.g. GPG configuration, email
-;; clients, file templates and snippets. It is optional.
+; clients, file templates and snippets. It is optional.
 ;; (setq user-full-name "John Doe"
 ;;       user-mail-address "john@doe.com")
 
@@ -33,10 +26,10 @@
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
 ;; in config.el
-
 (setq doom-theme 'catppuccin)
 (setq catppuccin-flavor 'mocha) ; or 'frappe 'latte, 'macchiato, or 'mocha
     (load-theme 'catppuccin t)
+
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
 (setq display-line-numbers-type 'relative)
@@ -99,22 +92,6 @@
 
 (setq company-transformers '(my/company-sort-snippet-first))
 
-;; Debugging
-(use-package dap-mode
-  :config
-  (dap-mode 1)
-  (dap-ui-mode 1)
-  (require 'dap-python)
-  (setq dap-python-debugger 'debugpy)  ;; Set the debugger to debugpy
-  ;; Register a new debug template
-  (dap-register-debug-template "My App"
-                               (list :type "python"
-                                     :args "-i"
-                                     :cwd nil
-                                     :env '(("DEBUG" . "1"))
-                                     :target-module (expand-file-name "~/src/myapp/.env/bin/myapp")
-                                     :request "launch"
-                                     :name "My App")))
 ;; Org mode
 (setq org-agenda-files '("~/org/agenda/"))
 (use-package org-superstar
@@ -122,14 +99,13 @@
   :config
   ;; Define custom bullets for list items
   (setq org-superstar-item-bullet-alist '((?- . ?✦) (?+ . ?➤) (?* . ?•)))
-  ;; Make leading bullets invisible
   (setq org-superstar-special-todo-items t)
   (add-hook 'org-mode-hook (lambda () (org-superstar-mode 1))))
-;; Size of the headings
-(custom-set-faces
- '(org-level-1 ((t (:inherit outline-1 :height 1.3 :weight bold))))
- '(org-level-2 ((t (:inherit outline-2 :height 1.2 :weight bold)))))
+;; side the special markers used for bold, italics and underline text
 (setq org-hide-emphasis-markers t)
+(after! org
+  (custom-set-faces!
+    '(org-table :foreground "cdd6f4" :weight normal))) ; use a brighter color
 ;; ein
 (use-package! ein
   :config
