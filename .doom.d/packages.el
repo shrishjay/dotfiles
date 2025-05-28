@@ -50,4 +50,3 @@
 (package! org-superstar)
 (package! catppuccin-theme)
 (package! tree-sitter-langs)
-(package! company-box)

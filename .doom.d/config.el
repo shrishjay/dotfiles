@@ -75,46 +75,16 @@
 
 ;; Dired
 (use-package dired)
-;; Company
-(add-hook 'eglot-managed-mode-hook
-          (lambda ()
-            (add-to-list 'company-backends
-                         '(company-capf :with company-yasnippet))))
-
-(defun my/company-sort-by-relevance (candidates)
-  (let ((prefix (company-grab-symbol))
-        (exact-match '())
-        (functions '())
-        (snippets '())
-        (others '()))
-    (dolist (cand candidates)
-      (let ((cand-str (if (stringp cand) cand (substring-no-properties cand))))
-        (cond
-         ;; Exact prefix matches first
-         ((and prefix (string-prefix-p prefix cand-str t))
-          (push cand exact-match))
-
-         ;; Snippet candidates next
-         ((get-text-property 0 'yas-annotation cand)
-          (push cand snippets))
-
-         ;; Functions next (heuristic: 'function' property or text ending with '(')
-         ((or (eq (get-text-property 0 'company-kind cand) 'Function)
-              (string-suffix-p "(" cand-str))
-          (push cand functions))
-
-         ;; Everything else last
-         (t (push cand others)))))
-    ;; Append in order: exact matches > functions > snippets > others
-    (append (nreverse exact-match)
-            (nreverse functions)
-            (nreverse snippets)
-            (nreverse others))))
-(setq company-transformers '(my/company-sort-by-relevance))
-
-(use-package company-box
-  :hook (company-mode . company-box-mode))
-
+;; integrate yasnippet-capf with eglot completion
+;; https://github.com/minad/corfu/wiki#making-a-cape-super-capf-for-eglot
+(defun mi/eglot-capf-with-yasnippet ()
+  (setq-local completion-at-point-functions
+              (list
+	       (cape-capf-super
+		#'eglot-completion-at-point
+		#'yasnippet-capf))))
+(with-eval-after-load 'eglot
+  (add-hook 'eglot-managed-mode-hook #'mi/eglot-capf-with-yasnippet))
 ;; Org mode
 (setq org-agenda-files '("~/org/agenda/"))
 (use-package org-superstar
