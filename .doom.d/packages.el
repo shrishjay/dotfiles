@@ -48,6 +48,5 @@
 ;; ...Or *all* packages (NOT RECOMMENDED; will likely break things)
 ;; (unpin! t)
 (package! org-superstar)
-(package! dape)
 (package! catppuccin-theme)
-(package! dap-mode)
+(package! tree-sitter-langs)

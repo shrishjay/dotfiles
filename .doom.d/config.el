@@ -139,3 +139,11 @@
         :n "C-0" #'pdf-view-scale-reset
         :n "n"   #'pdf-view-next-page
         :n "p"   #'pdf-view-previous-page))
+;; Tree-sitter
+(use-package! tree-sitter
+  :hook (python-mode . tree-sitter-mode)
+  :config
+  (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode))
+
+(use-package! tree-sitter-langs
+  :after tree-sitter)
