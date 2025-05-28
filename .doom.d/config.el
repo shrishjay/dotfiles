@@ -81,16 +81,39 @@
             (add-to-list 'company-backends
                          '(company-capf :with company-yasnippet))))
 
-(defun my/company-sort-snippet-first (candidates)
-  (let ((snippets '())
+(defun my/company-sort-by-relevance (candidates)
+  (let ((prefix (company-grab-symbol))
+        (exact-match '())
+        (functions '())
+        (snippets '())
         (others '()))
     (dolist (cand candidates)
-      (if (get-text-property 0 'yas-annotation cand)
-          (push cand snippets)
-        (push cand others)))
-    (append (nreverse snippets) (nreverse others))))
+      (let ((cand-str (if (stringp cand) cand (substring-no-properties cand))))
+        (cond
+         ;; Exact prefix matches first
+         ((and prefix (string-prefix-p prefix cand-str t))
+          (push cand exact-match))
 
-(setq company-transformers '(my/company-sort-snippet-first))
+         ;; Snippet candidates next
+         ((get-text-property 0 'yas-annotation cand)
+          (push cand snippets))
+
+         ;; Functions next (heuristic: 'function' property or text ending with '(')
+         ((or (eq (get-text-property 0 'company-kind cand) 'Function)
+              (string-suffix-p "(" cand-str))
+          (push cand functions))
+
+         ;; Everything else last
+         (t (push cand others)))))
+    ;; Append in order: exact matches > functions > snippets > others
+    (append (nreverse exact-match)
+            (nreverse functions)
+            (nreverse snippets)
+            (nreverse others))))
+(setq company-transformers '(my/company-sort-by-relevance))
+
+(use-package company-box
+  :hook (company-mode . company-box-mode))
 
 ;; Org mode
 (setq org-agenda-files '("~/org/agenda/"))
@@ -124,12 +147,15 @@
       :desc "Toggle Treemacs"
       "ft" #'treemacs)
 (setq treemacs-show-hidden-files nil)
-;; Auto close other projects when opening a new one
-; (treemacs-project-follow-mode 1)
 ;; Searching files by fd
+(defun my/consult-fd-from-home ()
+  "Find file from home directory using consult-fd."
+  (interactive)
+  (let ((default-directory (expand-file-name "~")))
+    (consult-fd)))
 (map! :leader
-      :desc "Find files (fd)"
-      "f z" #'consult-fd)
+      :desc "Find file from ~"
+      "f z" #'my/consult-fd-from-home)
 
 ;; PDF
 (after! pdf-tools
@@ -144,6 +170,5 @@
   :hook (python-mode . tree-sitter-mode)
   :config
   (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode))
-
 (use-package! tree-sitter-langs
   :after tree-sitter)
