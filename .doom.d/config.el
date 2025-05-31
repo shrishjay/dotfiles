@@ -71,7 +71,29 @@
 ;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
 ;; they are implemented.
 ;; Dashboard
-(setq fancy-splash-image (concat doom-private-dir "splash.png"))
+;; (setq fancy-splash-image (concat doom-private-dir "splash.png"))
+(setq initial-buffer-choice "~/.doom.d/start.org")
+
+(define-minor-mode start-mode
+  "Provide functions for custom start page."
+  :lighter " start"
+  :keymap (let ((map (make-sparse-keymap)))
+          ;;(define-key map (kbd "M-z") 'eshell)
+            (evil-define-key 'normal start-mode-map
+              (kbd "1") '(lambda () (interactive) (find-file "~/.doom.d/config.el"))
+              (kbd "2") '(lambda () (interactive) (find-file "~/.doom.d/init.el"))
+              (kbd "3") '(lambda () (interactive) (find-file "~/.doom.d/packages.el")))
+          map))
+
+(add-hook 'start-mode-hook 'read-only-mode) ;; make start.org read-only; use 'SPC t r' to toggle off read-only.
+(provide 'start-mode)
+(add-hook 'emacs-startup-hook
+  (lambda ()
+    (message "Emacs loaded in %s."
+             (format "%.2f seconds"
+                     (float-time
+                      (time-subtract after-init-time before-init-time)))
+             gcs-done)))
 
 ;; Dired
 (use-package dired)
@@ -99,6 +121,7 @@
 (after! org
   (custom-set-faces!
     '(org-table :foreground "cdd6f4" :weight normal))) ; use a brighter color
+
 ;; ein
 (use-package! ein
   :config
