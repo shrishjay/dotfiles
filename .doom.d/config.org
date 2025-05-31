@@ -1,6 +1,6 @@
 #+TITLE: My Doom Emacs config
 #+AUTHOR: Shrishjay Acharya
-#+PROPERTY:  :tangle config.el
+#+PROPERTY: header-args :tangle config.el
 #+DESCRIPTION: Shrishjay's personal Doom Emacs config.
 #+STARTUP: showeverything
 * TABLE OF CONTENTS :toc:
