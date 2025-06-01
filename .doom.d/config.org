@@ -18,6 +18,7 @@
 * ABOUT THIS CONFIG
 This is my personal configuration for my doom emacs setup, i tried to keep this configuration minimal for my workflow.
 * FONT, THEME AND UI
+For font i use JetbrainsMono Nerd Font and catppuccin mocha as my theme.
 #+begin_src emacs-lisp
 (setq doom-font (font-spec :family "JetBrainsMono Nerd Font" :size 15))
 (setq doom-theme 'catppuccin)
