@@ -6,7 +6,6 @@
 * TABLE OF CONTENTS :toc:
 - [[#about-this-config][ABOUT THIS CONFIG]]
 - [[#font-theme-and-ui][FONT, THEME AND UI]]
-- [[#dashboard][DASHBOARD]]
 - [[#completion][COMPLETION]]
 - [[#org-mode][ORG MODE]]
 - [[#ein][EIN]]
@@ -26,7 +25,7 @@ For font i use JetbrainsMono Nerd Font and catppuccin mocha as my theme.
     (load-theme 'catppuccin t)
 (setq display-line-numbers-type 'relative)
 #+end_src
-* DASHBOARD
+
 Instead of the default doom-dashboard I prefer to use a custom org page as my startup as it gives me more customization.
 #+begin_src emacs-lisp
 (setq fancy-splash-image (concat doom-private-dir "splash.png"))
@@ -59,6 +58,7 @@ For autocompletion i use corfu with cape and capf
 (after! org
   (custom-set-faces!
     '(org-table :foreground "cdd6f4" :weight normal))) ; use a brighter color
+
 #+end_src
 * EIN
 #+begin_src emacs-lisp
