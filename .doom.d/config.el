@@ -4,7 +4,7 @@
     (load-theme 'catppuccin t)
 (setq display-line-numbers-type 'relative)
 
-(setq fancy-splash-image (concat doom-private-dir "splash.png"))
+(setq fancy-splash-image (concat doom-private-dir "media/splash.png"))
 
 (defun mi/eglot-capf-with-yasnippet ()
   (setq-local completion-at-point-functions
@@ -17,6 +17,7 @@
 
 (setq org-directory "~/org/")
 (setq org-agenda-files '("~/org/agenda/"))
+(setq org-clock-sound "~/.doom.d/media/beep.wav")
 (use-package org-superstar
   :ensure t
   :config
@@ -35,27 +36,12 @@
   ;; Ensure that images display inline
   (setq ein:output-area-inlined-images t)
   (setq ein:use-auto-complete-superpack t) ;; Enable advanced completion
-  (setq ein:worksheet-enable-undo t)     ;; Enable undo in notebooks
   ;; Automatically display images when cells are executed
   (add-hook 'ein:notebook-mode-hook
             (lambda ()
               (setq-local ein:output-area-inlined-images t)
               (setq ein:worksheet-enable-inline-images t))))
 (setq ein:output-area-inlined-images-max-height 600)
-;;Treemacs
-(map! :leader
-      :desc "Toggle Treemacs"
-      "ft" #'treemacs)
-(setq treemacs-show-hidden-files nil)
-;; Searching files by fd
-(defun my/consult-fd-from-home ()
-  "Find file from home directory using consult-fd."
-  (interactive)
-  (let ((default-directory (expand-file-name "~")))
-    (consult-fd)))
-(map! :leader
-      :desc "Find file from ~"
-      "f z" #'my/consult-fd-from-home)
 
 (map! :leader
       :desc "Toggle Treemacs"
