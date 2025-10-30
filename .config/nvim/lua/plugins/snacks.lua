@@ -1,15 +1,49 @@
 return {
   {
-    "folke/snacks.nvim",
+    "snacks.nvim",
     opts = {
       dashboard = {
-        sections = {
-          { section = "header" },
-          { section = "keys", gap = 1, padding = 1 },
-          { pane = 2, icon = " ", title = "Projects", section = "projects", indent = 2, padding = 1 },
-          { section = "startup" },
+        preset = {
+          pick = function(cmd, opts)
+            return LazyVim.pick(cmd, opts)()
+          end,
+          header = [[
+	                                                                    
+	       ████ ██████           █████      ██                    
+	      ███████████             █████                            
+	      █████████ ███████████████████ ███   ███████████  
+	     █████████  ███    █████████████ █████ ██████████████  
+	    █████████ ██████████ █████████ █████ █████ ████ █████  
+	  ███████████ ███    ███ █████████ █████ █████ ████ █████ 
+	 ██████  █████████████████████ ████ █████ █████ ████ ██████]],
         },
-      }
-    }
-  }
-} 
+      },
+      explorer = {
+        win = {
+          position = "left",
+        },
+      },
+    },
+    keys = {
+
+      {
+        "-",
+        function()
+          require("snacks").explorer({
+            cwd = vim.fn.expand("%:p:h"),
+          })
+        end,
+        desc = "Open explorer in current file directory",
+      },
+      {
+        "<leader>e",
+        function()
+          require("snacks").explorer({
+            cwd = vim.fn.expand("%:p:h"),
+          })
+        end,
+        desc = "Open explorer in current file directory",
+      },
+    },
+  },
+}

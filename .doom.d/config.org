@@ -13,6 +13,7 @@
 - [[#file-search][FILE SEARCH]]
 - [[#pdf][PDF]]
 - [[#tree-sitter][TREE-SITTER]]
+- [[#vterm][VTERM]]
 
 * ABOUT THIS CONFIG
 This is my personal configuration for my doom emacs setup, i tried to keep this configuration minimal for my workflow.
@@ -24,6 +25,7 @@ For font i use JetbrainsMono Nerd Font and catppuccin mocha as my theme.
 (setq catppuccin-flavor 'mocha) ; or 'frappe 'latte, 'macchiato, or 'mocha
     (load-theme 'catppuccin t)
 (setq display-line-numbers-type 'relative)
+(use-package dired)
 #+end_src
 
 Instead of the default doom-dashboard I prefer to use a custom org page as my startup as it gives me more customization.
@@ -33,14 +35,16 @@ Instead of the default doom-dashboard I prefer to use a custom org page as my st
 * COMPLETION
 For autocompletion i use corfu with cape and capf
 #+begin_src emacs-lisp
+(add-hook 'python-mode-hook #'eglot-ensure)
+
 (defun mi/eglot-capf-with-yasnippet ()
-  (setq-local completion-at-point-functions
-              (list
+ (setq-local completion-at-point-functions
+             (list
 	       (cape-capf-super
 		#'eglot-completion-at-point
 		#'yasnippet-capf))))
 (with-eval-after-load 'eglot
-  (add-hook 'eglot-managed-mode-hook #'mi/eglot-capf-with-yasnippet))
+ (add-hook 'eglot-managed-mode-hook #'mi/eglot-capf-with-yasnippet))
 #+end_src
 * ORG MODE
 #+begin_src emacs-lisp
@@ -59,21 +63,27 @@ For autocompletion i use corfu with cape and capf
 (after! org
   (custom-set-faces!
     '(org-table :foreground "cdd6f4" :weight normal))) ; use a brighter color
-
+(after! org
+  ;; Set IPython as the default for Python blocks
+  (setq org-babel-default-header-args:python
+        '((:kernel . "python3")
+          (:session . "ipython")
+          (:async . "yes")
+          (:results . "output"))))
 #+end_src
 * EIN
 #+begin_src emacs-lisp
-(use-package! ein
-  :config
-  ;; Ensure that images display inline
-  (setq ein:output-area-inlined-images t)
-  (setq ein:use-auto-complete-superpack t) ;; Enable advanced completion
-  ;; Automatically display images when cells are executed
-  (add-hook 'ein:notebook-mode-hook
-            (lambda ()
-              (setq-local ein:output-area-inlined-images t)
-              (setq ein:worksheet-enable-inline-images t))))
-(setq ein:output-area-inlined-images-max-height 600)
+;; (use-package! ein
+;;   :config
+;;   ;; Ensure that images display inline
+;;   (setq ein:output-area-inlined-images t)
+;;   (setq ein:use-auto-complete-superpack t) ;; Enable advanced completion
+;;   ;; Automatically display images when cells are executed
+;;   (add-hook 'ein:notebook-mode-hook
+;;             (lambda ()
+;;               (setq-local ein:output-area-inlined-images t)
+;;               (setq ein:worksheet-enable-inline-images t))))
+;; (setq ein:output-area-inlined-images-max-height 600)
 #+end_src
 * TREEMACS
 #+begin_src emacs-lisp
@@ -111,4 +121,13 @@ For autocompletion i use corfu with cape and capf
   (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode))
 (use-package! tree-sitter-langs
   :after tree-sitter)
+;; Ensure python mode is loaded so we have python-mode-map
+
+#+end_src
+* VTERM
+#+begin_src emacs-lisp
+(setq vterm-shell "/usr/bin/fish")
+(map! :leader
+      :desc "Open vterm"
+      "v t" #'vterm)
 #+end_src

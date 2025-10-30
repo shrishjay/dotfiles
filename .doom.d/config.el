@@ -3,17 +3,20 @@
 (setq catppuccin-flavor 'mocha) ; or 'frappe 'latte, 'macchiato, or 'mocha
     (load-theme 'catppuccin t)
 (setq display-line-numbers-type 'relative)
+(use-package dired)
 
 (setq fancy-splash-image (concat doom-private-dir "media/splash.png"))
 
+(add-hook 'python-mode-hook #'eglot-ensure)
+
 (defun mi/eglot-capf-with-yasnippet ()
-  (setq-local completion-at-point-functions
-              (list
+ (setq-local completion-at-point-functions
+             (list
 	       (cape-capf-super
 		#'eglot-completion-at-point
 		#'yasnippet-capf))))
 (with-eval-after-load 'eglot
-  (add-hook 'eglot-managed-mode-hook #'mi/eglot-capf-with-yasnippet))
+ (add-hook 'eglot-managed-mode-hook #'mi/eglot-capf-with-yasnippet))
 
 (setq org-directory "~/org/")
 (setq org-agenda-files '("~/org/agenda/"))
@@ -30,18 +33,25 @@
 (after! org
   (custom-set-faces!
     '(org-table :foreground "cdd6f4" :weight normal))) ; use a brighter color
+(after! org
+  ;; Set IPython as the default for Python blocks
+  (setq org-babel-default-header-args:python
+        '((:kernel . "python3")
+          (:session . "ipython")
+          (:async . "yes")
+          (:results . "output"))))
 
-(use-package! ein
-  :config
-  ;; Ensure that images display inline
-  (setq ein:output-area-inlined-images t)
-  (setq ein:use-auto-complete-superpack t) ;; Enable advanced completion
-  ;; Automatically display images when cells are executed
-  (add-hook 'ein:notebook-mode-hook
-            (lambda ()
-              (setq-local ein:output-area-inlined-images t)
-              (setq ein:worksheet-enable-inline-images t))))
-(setq ein:output-area-inlined-images-max-height 600)
+;; (use-package! ein
+;;   :config
+;;   ;; Ensure that images display inline
+;;   (setq ein:output-area-inlined-images t)
+;;   (setq ein:use-auto-complete-superpack t) ;; Enable advanced completion
+;;   ;; Automatically display images when cells are executed
+;;   (add-hook 'ein:notebook-mode-hook
+;;             (lambda ()
+;;               (setq-local ein:output-area-inlined-images t)
+;;               (setq ein:worksheet-enable-inline-images t))))
+;; (setq ein:output-area-inlined-images-max-height 600)
 
 (map! :leader
       :desc "Toggle Treemacs"
@@ -71,3 +81,9 @@
   (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode))
 (use-package! tree-sitter-langs
   :after tree-sitter)
+;; Ensure python mode is loaded so we have python-mode-map
+
+(setq vterm-shell "/usr/bin/fish")
+(map! :leader
+      :desc "Open vterm"
+      "v t" #'vterm)
