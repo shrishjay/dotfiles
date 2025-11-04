@@ -1,5 +1,4 @@
-return
-{
+return {
   {
     "saghen/blink.cmp",
     opts = {
@@ -13,6 +12,7 @@ return
           },
         },
       },
+
       keymap = {
         preset = "default",
         ["<Tab>"] = { "select_next", "snippet_forward", "fallback" },
@@ -32,24 +32,44 @@ return
   {
     "folke/noice.nvim",
     opts = function(_, opts)
+      opts.lsp = opts.lsp or {}
       opts.lsp.signature = {
+        enabled = true,
         auto_open = {
           enabled = true,
           trigger = true,
           luasnip = true,
+          throttle = 50,
         },
-        opts = {
-          border = "rounded",
-          relative = "cursor",
-          anchor = "SW",
-          row = -1,
-          size = {
-            width = 120, -- wider horizontally
-            height = 5,  -- small vertically
-          },
+        view = nil,
+        opts = {},
+      }
+
+      -- Use noice's views for better positioning
+      opts.views = opts.views or {}
+      opts.views.hover = {
+        border = {
+          style = "rounded",
+        },
+        position = { row = 2, col = 1 },
+        size = {
+          max_width = 80, -- Maximum width
+          max_height = 10, -- Maximum height
         },
       }
-    end,
-  }
 
+      return opts
+    end,
+  },
+  {
+    "stevearc/conform.nvim",
+    event = { "BufWritePre" },
+    cmd = { "ConformInfo" },
+    opts = {
+      formatters_by_ft = {
+        python = { "black" },
+        lua = { "stylua" },
+      },
+    },
+  },
 }
