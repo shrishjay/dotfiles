@@ -45,6 +45,7 @@ For autocompletion i use corfu with cape and capf
 		#'yasnippet-capf))))
 (with-eval-after-load 'eglot
  (add-hook 'eglot-managed-mode-hook #'mi/eglot-capf-with-yasnippet))
+(add-hook 'python-mode-hook #'eglot-ensure)
 #+end_src
 * ORG MODE
 #+begin_src emacs-lisp
@@ -126,7 +127,6 @@ For autocompletion i use corfu with cape and capf
 #+end_src
 * VTERM
 #+begin_src emacs-lisp
-(setq vterm-shell "/usr/bin/fish")
 (map! :leader
       :desc "Open vterm"
       "v t" #'vterm)

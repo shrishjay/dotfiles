@@ -17,6 +17,7 @@
 		#'yasnippet-capf))))
 (with-eval-after-load 'eglot
  (add-hook 'eglot-managed-mode-hook #'mi/eglot-capf-with-yasnippet))
+(add-hook 'python-mode-hook #'eglot-ensure)
 
 (setq org-directory "~/org/")
 (setq org-agenda-files '("~/org/agenda/"))
@@ -83,7 +84,6 @@
   :after tree-sitter)
 ;; Ensure python mode is loaded so we have python-mode-map
 
-(setq vterm-shell "/usr/bin/fish")
 (map! :leader
       :desc "Open vterm"
       "v t" #'vterm)

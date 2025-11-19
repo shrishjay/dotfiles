@@ -10,7 +10,6 @@ return {
           scratch_repl = true,
           repl_definition = {
             python = {
-              -- Always start IPython in the current buffer's directory
               command = function()
                 local cwd = vim.fn.expand("%:p:h")
                 return {
@@ -22,7 +21,7 @@ return {
               format = require("iron.fts.common").bracketed_paste,
             },
           },
-          repl_open_cmd = view.right(60),
+          repl_open_cmd = require("iron.view").bottom(15),
         },
         keymaps = {
           send_motion = "<leader>sc",
@@ -38,7 +37,7 @@ return {
         highlight = { italic = true },
       })
 
-      -- 🔹 Optional: automatically print where REPL is starting
+      -- Optional: show REPL starting directory
       vim.api.nvim_create_user_command("IronReplCwd", function()
         print("Iron REPL will start in: " .. vim.fn.expand("%:p:h"))
       end, {})
@@ -46,14 +45,13 @@ return {
 
     keys = {
       {
-        -- Start Iron REPL in the current file's directory
         "<leader>rs",
         function()
-          local cwd = vim.fn.expand("%:p:h") -- buffer's folder
-          local prev_cwd = vim.fn.getcwd() -- save old cwd
-          vim.cmd("lcd " .. cwd) -- set local cwd for window
-          vim.cmd("IronRepl") -- start REPL
-          vim.cmd("lcd " .. prev_cwd) -- restore previous cwd
+          local cwd = vim.fn.expand("%:p:h")
+          local prev_cwd = vim.fn.getcwd()
+          vim.cmd("lcd " .. cwd)
+          vim.cmd("IronRepl")
+          vim.cmd("lcd " .. prev_cwd)
         end,
         desc = "Start Iron REPL in file's directory",
       },
@@ -61,5 +59,30 @@ return {
       { "<leader>rf", "<cmd>IronFocus<cr>", desc = "Focus Iron REPL" },
       { "<leader>rh", "<cmd>IronHide<cr>", desc = "Hide Iron REPL" },
     },
+  },
+  {
+    "jpalardy/vim-slime",
+    config = function()
+      -- Use tmux as the target
+      vim.g.slime_target = "tmux"
+
+      -- Default tmux target (current pane on the right)
+      vim.g.slime_default_config = {
+        socket_name = "default",
+        target_pane = "{right-of}",
+      }
+
+      -- Don't ask for confirmation every time
+      vim.g.slime_dont_ask_default = 1
+
+      -- Preserve trailing newlines for Python
+      vim.g.slime_preserve_curpos = 0
+
+      -- Keymaps
+      vim.keymap.set("n", "<leader>ss", "<Plug>SlimeLineSend", { desc = "Send line to REPL" })
+      vim.keymap.set("n", "<leader>sp", "<Plug>SlimeParagraphSend", { desc = "Send paragraph to REPL" })
+      vim.keymap.set("x", "<leader>sr", "<Plug>SlimeRegionSend", { desc = "Send selection to REPL" })
+      vim.keymap.set("n", "<leader>sc", "<Plug>SlimeConfig", { desc = "Configure slime" })
+    end,
   },
 }

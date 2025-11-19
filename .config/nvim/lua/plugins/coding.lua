@@ -12,7 +12,6 @@ return {
           },
         },
       },
-
       keymap = {
         preset = "default",
         ["<Tab>"] = { "select_next", "snippet_forward", "fallback" },

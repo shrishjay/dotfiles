@@ -1,37 +1,36 @@
-set -g fish_greeting
-set --universal EDITOR /usr/bin/nvim
-source ~/.config/fish/hyde_config.fish
-zoxide init fish | source
-eval "$(zoxide init --cmd cd fish)"
-if status is-interactive
+function fish_prompt -d "Write out the prompt"
+    # This shows up as USER@HOST /home/user/ >, with the directory colored
+    # $USER and $hostname are set by fish, so you can just use them
+    # instead of using `whoami` and `hostname`
+    printf '%s@%s %s%s%s > ' $USER $hostname \
+        (set_color $fish_color_cwd) (prompt_pwd) (set_color normal)
+end
+
+if status is-interactive # Commands to run in interactive sessions can go here
+
+    # No greeting
+    set fish_greeting
+
+    # Use starship
     starship init fish | source
+    if test -f ~/.local/state/quickshell/user/generated/terminal/sequences.txt
+        cat ~/.local/state/quickshell/user/generated/terminal/sequences.txt
+    end
+
+    # Aliases
+    alias pamcan pacman
+    alias ls 'eza --icons'
+    alias clear "printf '\033[2J\033[3J\033[1;1H'"
+    alias q 'qs -c ii'
+    alias fzf 'fzf --preview="bat --color=always {}"'
+    alias nfzf 'nvim (fzf --preview="bat --color=always {}")'
+    alias y yazi
+
+    #source
+    set -Ux PATH $PATH $HOME/.emacs.d/bin
+
 end
 
-# List Directory
-alias l='eza -lh  --icons=auto' # long list
-alias ls='eza -1   --icons=auto' # short list
-alias ll='eza -lha --icons=auto --sort=name --group-directories-first' # long list all
-alias ld='eza -lhD --icons=auto' # long list dirs
-alias lt='eza --icons=auto --tree' # list folder as tree
-alias vc='code'
-
-# Handy change dir shortcuts
-abbr .. 'cd ..'
-abbr ... 'cd ../..'
-abbr .3 'cd ../../..'
-abbr .4 'cd ../../../..'
-abbr .5 'cd ../../../../..'
-
-# Always mkdir a path (this doesn't inhibit functionality to make a single dir)
-abbr mkdir 'mkdir -p'
-function y
-	set tmp (mktemp -t "yazi-cwd.XXXXXX")
-	yazi $argv --cwd-file="$tmp"
-	if set cwd (command cat -- "$tmp"); and [ -n "$cwd" ]; and [ "$cwd" != "$PWD" ]
-		builtin cd -- "$cwd"
-	end
-	rm -f -- "$tmp"
-end
 if string match -q '*pts*' (tty)
     fastfetch --config examples/13
 else
@@ -40,4 +39,3 @@ else
         echo "Start Hyprland with command Hyprland"
     end
 end
-

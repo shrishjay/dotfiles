@@ -23,6 +23,11 @@ return {
           position = "left",
         },
       },
+      picker = {
+        sources = {
+          files = { hidden = true },
+        },
+      },
     },
     keys = {
 

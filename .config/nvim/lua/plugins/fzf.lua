@@ -12,7 +12,7 @@ return {
       },
       files = {
         cmd = "fd --type f --hidden --exclude .git", -- use fd, show hidden files
-        previewer = false,                           -- set to true if you want previews
+        previewer = false, -- set to true if you want previews
       },
       grep = {
         rg_opts = "--column --line-number --no-heading --color=always --smart-case --hidden",
