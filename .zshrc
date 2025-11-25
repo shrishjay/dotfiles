@@ -14,6 +14,12 @@ alias y='yazi'
 alias fzf='fzf --preview="bat --color=always {}"'
 alias nfzf='nvim (fzf --preview="bat --color=always {}")'
 alias fabric='fabric-ai'
+# Golang environment variables
+export GOROOT=/usr/local/go
+export GOPATH=$HOME/go
+# Update PATH to include GOPATH and GOROOT binaries
+export PATH=$GOPATH/bin:$GOROOT/bin:$HOME/.local/bin:$PATH
+
 # Set-up FZF key bindings (CTRL R for fuzzy history finder)
 source <(fzf --zsh)
 
