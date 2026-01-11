@@ -1,44 +1,29 @@
 return {
   {
-    "yousefhadder/markdown-plus.nvim",
-    ft = "markdown", -- Load on markdown files by default
-    config = function()
-      require("markdown-plus").setup({
-        -- Configuration options (all optional)
-        enabled = true,
-        features = {
-          list_management = true, -- List management features
-          text_formatting = true, -- Text formatting features
-          headers_toc = true, -- Headers + TOC features
-          links = true, -- Link management features
-          images = true, -- Image link management features
-          quotes = true, -- Blockquote toggling feature
-          callouts = true, -- GFM callouts/admonitions feature
-          code_block = true, -- Code block conversion feature
-          table = true, -- Table support features
-        },
-        keymaps = {
-          enabled = true, -- Enable default keymaps (<Plug> available for custom)
-        },
-        toc = { -- TOC window configuration
-          initial_depth = 2,
-        },
-        callouts = { -- Callouts configuration
-          default_type = "NOTE",
-          custom_types = {}, -- Add custom types like { "DANGER", "SUCCESS" }
-        },
-        table = { -- Table sub-configuration
-          auto_format = true,
-          default_alignment = "left",
-          confirm_destructive = true, -- Confirm before transpose/sort operations
-          keymaps = {
-            enabled = true,
-            prefix = "<leader>t",
-            insert_mode_navigation = true, -- Alt+hjkl cell navigation
-          },
-        },
-        filetypes = { "markdown" }, -- Filetypes to enable the plugin for
-      })
-    end,
+    "brianhuster/live-preview.nvim",
+    dependencies = {
+      -- You can choose one of the following pickers
+      "folke/snacks.nvim",
+    },
   },
+  {
+    "OXY2DEV/markview.nvim",
+    lazy = false,
+
+    -- Completion for `blink.cmp`
+    dependencies = { "saghen/blink.cmp" },
+  },
+  -- Toggle markdown checkboxes
+  vim.keymap.set("n", "<C-c>", function()
+    local line = vim.api.nvim_get_current_line()
+    if line:match("%- %[ %]") then
+      -- Unchecked -> Checked
+      local new_line = line:gsub("%- %[ %]", "- [x]", 1)
+      vim.api.nvim_set_current_line(new_line)
+    elseif line:match("%- %[x%]") or line:match("%- %[X%]") then
+      -- Checked -> Unchecked
+      local new_line = line:gsub("%- %[[xX]%]", "- [ ]", 1)
+      vim.api.nvim_set_current_line(new_line)
+    end
+  end, { desc = "Toggle markdown checkbox" }),
 }

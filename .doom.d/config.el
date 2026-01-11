@@ -1,14 +1,20 @@
 (setq doom-font (font-spec :family "JetBrainsMono Nerd Font" :size 15))
-(setq doom-theme 'catppuccin)
-(setq catppuccin-flavor 'mocha) ; or 'frappe 'latte, 'macchiato, or 'mocha
-    (load-theme 'catppuccin t)
+(custom-set-faces!
+  '(default :background "#121212")
+  '(solaire-default-face :background "#121212"))
 (setq display-line-numbers-type 'relative)
-(use-package dired)
-
 (setq fancy-splash-image (concat doom-private-dir "media/splash.png"))
+(use-package dired)
+(add-hook 'dired-mode-hook 'auto-revert-mode)
+(setq-default header-line-format " ")
+(custom-set-faces
+ '(header-line ((t (:background nil :inherit default :height 0.5)))))
 
-(add-hook 'python-mode-hook #'eglot-ensure)
-
+;; Define the function first (always available)
+(after! corfu
+  (setq corfu-auto t
+        corfu-auto-prefix 1
+        corfu-auto-delay 0.05))
 (defun mi/eglot-capf-with-yasnippet ()
  (setq-local completion-at-point-functions
              (list
@@ -17,20 +23,16 @@
 		#'yasnippet-capf))))
 (with-eval-after-load 'eglot
  (add-hook 'eglot-managed-mode-hook #'mi/eglot-capf-with-yasnippet))
-(add-hook 'python-mode-hook #'eglot-ensure)
+(map! :leader
+      :desc "Enable Eglot in buffer"
+      "e" #'eglot)
+(add-hook 'python-ts-mode-hook 
+          (lambda ()
+            (run-with-timer 0.0 nil #'eglot-ensure)))
 
 (setq org-directory "~/org/")
 (setq org-agenda-files '("~/org/agenda/"))
 (setq org-clock-sound "~/.doom.d/media/beep.wav")
-(use-package org-superstar
-  :ensure t
-  :config
-  ;; Define custom bullets for list items
-  (setq org-superstar-item-bullet-alist '((?- . ?✦) (?+ . ?➤) (?* . ?•)))
-  (setq org-superstar-special-todo-items t)
-  (add-hook 'org-mode-hook (lambda () (org-superstar-mode 1))))
-;; side the special markers used for bold, italics and underline text
-(setq org-hide-emphasis-markers t)
 (after! org
   (custom-set-faces!
     '(org-table :foreground "cdd6f4" :weight normal))) ; use a brighter color
@@ -41,18 +43,6 @@
           (:session . "ipython")
           (:async . "yes")
           (:results . "output"))))
-
-;; (use-package! ein
-;;   :config
-;;   ;; Ensure that images display inline
-;;   (setq ein:output-area-inlined-images t)
-;;   (setq ein:use-auto-complete-superpack t) ;; Enable advanced completion
-;;   ;; Automatically display images when cells are executed
-;;   (add-hook 'ein:notebook-mode-hook
-;;             (lambda ()
-;;               (setq-local ein:output-area-inlined-images t)
-;;               (setq ein:worksheet-enable-inline-images t))))
-;; (setq ein:output-area-inlined-images-max-height 600)
 
 (map! :leader
       :desc "Toggle Treemacs"
@@ -67,6 +57,9 @@
 (map! :leader
       :desc "Find file from ~"
       "f z" #'my/consult-fd-from-home)
+(map! :leader
+      :desc "Find file from directory"
+      :"f a" #'consult-fd)
 
 (after! pdf-tools
   (map! :map pdf-view-mode-map
@@ -76,13 +69,14 @@
         :n "n"   #'pdf-view-next-page
         :n "p"   #'pdf-view-previous-page))
 
-(use-package! tree-sitter
-  :hook (python-mode . tree-sitter-mode)
+(use-package! treesit
   :config
-  (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode))
-(use-package! tree-sitter-langs
-  :after tree-sitter)
-;; Ensure python mode is loaded so we have python-mode-map
+  ;; Automatically use tree-sitter modes when available
+  (setq treesit-font-lock-level 4) ;; Maximum highlighting detail
+  
+  ;; Remap major modes to their tree-sitter variants
+  (setq major-mode-remap-alist
+        '((python-mode . python-ts-mode))))
 
 (map! :leader
       :desc "Open vterm"
