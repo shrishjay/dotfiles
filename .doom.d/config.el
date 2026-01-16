@@ -1,14 +1,12 @@
-(setq doom-font (font-spec :family "JetBrainsMono Nerd Font" :size 15))
+;; (setq doom-font (font-spec :family "JetBrainsMono Nerd Font" :size 15))
 (custom-set-faces!
-  '(default :background "#121212")
-  '(solaire-default-face :background "#121212"))
+  '(default :background "#16181c")
+  '(solaire-default-face :background "#16181c")) 
 (setq display-line-numbers-type 'relative)
 (setq fancy-splash-image (concat doom-private-dir "media/splash.png"))
 (use-package dired)
 (add-hook 'dired-mode-hook 'auto-revert-mode)
 (setq-default header-line-format " ")
-(custom-set-faces
- '(header-line ((t (:background nil :inherit default :height 0.5)))))
 
 ;; Define the function first (always available)
 (after! corfu
@@ -29,6 +27,9 @@
 (add-hook 'python-ts-mode-hook 
           (lambda ()
             (run-with-timer 0.0 nil #'eglot-ensure)))
+(add-hook 'inferior-python-mode-hook
+          (lambda ()
+            (corfu-mode -1)))
 
 (setq org-directory "~/org/")
 (setq org-agenda-files '("~/org/agenda/"))
@@ -36,13 +37,6 @@
 (after! org
   (custom-set-faces!
     '(org-table :foreground "cdd6f4" :weight normal))) ; use a brighter color
-(after! org
-  ;; Set IPython as the default for Python blocks
-  (setq org-babel-default-header-args:python
-        '((:kernel . "python3")
-          (:session . "ipython")
-          (:async . "yes")
-          (:results . "output"))))
 
 (map! :leader
       :desc "Toggle Treemacs"

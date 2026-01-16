@@ -10,7 +10,7 @@
                                     | C-x d     | [[elisp:(dired (getenv "HOME"))][dired]]                | Dired file manager                   |
                                     | SPC h r r | [[elisp:(doom/reload)][doom/reload]]          | Reload Doom Emacs                    |
                                     | SPC f u   | [[elisp:(doom/sudo-find-file nil)][doom/sudo-find-file]]  | Find file and open as root           |
-                                    | SPC f U   | /doom/sudo-this-file/  | Open current file as root            |
+                                    | SPC f U   | /doom/sudo-this-file/| Open current file as root            |
                                     | SPC o A   | [[elisp:(+eshell/-org-agenda)][org-agenda]]           | Open the Org Agenda                  |
                                     | SPC f z   | [[elisp:(my/consult-fd-from-home)][consult-fd-from-home]] | Find a file under the home directory |
                                     |-----------+----------------------+--------------------------------------|

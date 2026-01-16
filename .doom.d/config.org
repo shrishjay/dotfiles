@@ -19,18 +19,18 @@ This is my personal configuration for my doom emacs setup, i tried to keep this 
 * FONT, THEME AND UI
 For font I use JetbrainsMono Nerd Font and catppuccin mocha as my theme.
 #+begin_src emacs-lisp
-(setq doom-font (font-spec :family "JetBrainsMono Nerd Font" :size 15))
+;; (setq doom-font (font-spec :family "JetBrainsMono Nerd Font" :size 15))
 (custom-set-faces!
-  '(default :background "#121212")
-  '(solaire-default-face :background "#121212"))
+  '(default :background "#16181c")
+  '(solaire-default-face :background "#16181c")) 
 (setq display-line-numbers-type 'relative)
 (setq fancy-splash-image (concat doom-private-dir "media/splash.png"))
 (use-package dired)
 (add-hook 'dired-mode-hook 'auto-revert-mode)
 (setq-default header-line-format " ")
-(custom-set-faces
- '(header-line ((t (:background nil :inherit default :height 0.5)))))
 #+end_src
+
+#+RESULTS:
 
 * COMPLETION
 For autocompletion i use corfu with cape and capf
@@ -55,6 +55,10 @@ For autocompletion i use corfu with cape and capf
 (add-hook 'python-ts-mode-hook 
           (lambda ()
             (run-with-timer 0.0 nil #'eglot-ensure)))
+(add-hook 'inferior-python-mode-hook
+          (lambda ()
+            (corfu-mode -1)))
+
 #+end_src
 
 * ORG MODE
@@ -65,13 +69,6 @@ For autocompletion i use corfu with cape and capf
 (after! org
   (custom-set-faces!
     '(org-table :foreground "cdd6f4" :weight normal))) ; use a brighter color
-(after! org
-  ;; Set IPython as the default for Python blocks
-  (setq org-babel-default-header-args:python
-        '((:kernel . "python3")
-          (:session . "ipython")
-          (:async . "yes")
-          (:results . "output"))))
 #+end_src
 
 * TREEMACS
