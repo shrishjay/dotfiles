@@ -31,10 +31,18 @@ vim.diagnostic.config({
     source = true,
   },
 })
+
 vim.api.nvim_create_autocmd("TermOpen", {
-  group = vim.api.nvim_create_augroup("custom-term-open", { clear = true }),
   callback = function()
-    vim.opt.number = false
-    vim.opt.relativenumber = false
+    vim.opt_local.winbar = vim.fn.fnamemodify(vim.api.nvim_buf_get_name(vim.fn.bufnr("#")), ":t")
+  end,
+})
+
+vim.api.nvim_create_autocmd("BufEnter", {
+  callback = function()
+    local root = require("snacks").git.get_root()
+    if root then
+      vim.cmd.cd(root)
+    end
   end,
 })

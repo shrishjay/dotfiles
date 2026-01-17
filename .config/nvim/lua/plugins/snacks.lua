@@ -20,6 +20,9 @@ return {
         },
       },
       explorer = {
+        cwd = function()
+          return require("snacks").git.get_root() or vim.fn.getcwd()
+        end,
         win = {
           position = "left",
         },
