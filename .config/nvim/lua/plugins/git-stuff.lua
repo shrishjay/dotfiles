@@ -3,32 +3,23 @@ return {
     "tpope/vim-fugitive",
   },
   {
-    "NeogitOrg/neogit",
-    dependencies = {
-      "nvim-lua/plenary.nvim", -- required
-      "sindrets/diffview.nvim", -- optional - Diff integration
-      "nvim-telescope/telescope.nvim",
+    "kdheepak/lazygit.nvim",
+    lazy = true,
+    cmd = {
+      "LazyGit",
+      "LazyGitConfig",
+      "LazyGitCurrentFile",
+      "LazyGitFilter",
+      "LazyGitFilterCurrentFile",
     },
-    config = function()
-      require("neogit").setup({
-        -- Use the current buffer's git root, not home directory
-        use_default_keymaps = true,
-      })
-    end,
+    -- optional for floating window border decoration
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+    },
+    -- setting the keybinding for LazyGit with 'keys' is recommended in
+    -- order to load the plugin when the command is run for the first time
     keys = {
-      {
-        "<leader>gg",
-        function()
-          -- Find git root from current file's directory
-          local git_root = vim.fn.systemlist("git -C " .. vim.fn.expand("%:p:h") .. " rev-parse --show-toplevel")[1]
-          if vim.v.shell_error == 0 then
-            require("neogit").open({ cwd = git_root })
-          else
-            require("neogit").open({ cwd = vim.fn.expand("%:p:h") })
-          end
-        end,
-        desc = "Open Neogit in project directory",
-      },
+      { "<leader>gg", "<cmd>LazyGit<cr>", desc = "LazyGit" },
     },
   },
 }

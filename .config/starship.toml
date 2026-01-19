@@ -11,7 +11,7 @@ add_newline = false
 # $character
 # """
 format = """
-$cmd_duration 󰜥 $directory $git_branch $python
+$cmd_duration 󰜥 $directory $git_branch
 $character"""
 
 # Replace the "❯" symbol in the prompt with "➜"
@@ -98,9 +98,3 @@ format = '[](bold fg:green)[󰉋 $path]($style)[](bold fg:green)'
 [cmd_duration]
 min_time = 0
 format = '[](bold fg:yellow)[󰪢 $duration](bold bg:yellow fg:black)[](bold fg:yellow)'
-[python]
-style = 'teal'
-symbol = ' '
-format = '[${symbol}${pyenv_prefix}(${version} )(\($virtualenv\) )]($style)'
-pyenv_version_name = true
-pyenv_prefix = ''
