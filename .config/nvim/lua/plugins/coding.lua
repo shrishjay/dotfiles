@@ -1,17 +1,22 @@
 return {
   {
     "saghen/blink.cmp",
+    event = { "BufReadPost", "BufNewFile" },
+    version = "1.*",
+    dependencies = { "rafamadriz/friendly-snippets" },
     opts = {
+      sources = {
+        default = { "snippets", "lsp", "path", "buffer" },
+      },
+
       completion = {
-        menu = {
-          border = "rounded",
-        },
+        menu = { border = "rounded" },
         documentation = {
-          window = {
-            border = "rounded",
-          },
+        auto_show=true,
+          window = { border = "rounded" },
         },
       },
+
       keymap = {
         preset = "default",
         ["<Tab>"] = { "select_next", "snippet_forward", "fallback" },
@@ -21,46 +26,72 @@ return {
     },
   },
   {
-    "neovim/nvim-lspconfig",
+    "nvim-mini/mini.pairs",
+    event = "InsertEnter",
     opts = {
-      diagnostics = {
-        virtual_text = false,
-      },
+      modes = { insert = true, command = true, terminal = false },
+      skip_next = [=[[%w%%%'%[%"%.%`%$]]=],
+      skip_ts = { "string" },
+      skip_unbalanced = true,
+      markdown = true,
     },
+    config = function(_, opts)
+      require("mini.pairs").setup(opts)
+    end,
   },
+
   {
-    "folke/noice.nvim",
-    opts = function(_, opts)
-      opts.lsp = opts.lsp or {}
-      opts.lsp.signature = {
-        enabled = true,
-        auto_open = {
-          enabled = true,
-          trigger = true,
-          luasnip = true,
-          throttle = 50,
-        },
-        view = nil,
-        opts = {},
-      }
+    "folke/ts-comments.nvim",
+    event = { "BufReadPost", "BufNewFile" },
+    opts = {},
+  },
 
-      -- Use noice's views for better positioning
-      opts.views = opts.views or {}
-      opts.views.hover = {
-        border = {
-          style = "rounded",
-        },
-        position = { row = 2, col = 1 },
-        size = {
-          max_width = 80, -- Maximum width
-          max_height = 10, -- Maximum height
+  {
+    "nvim-mini/mini.ai",
+    event = { "BufReadPost", "BufNewFile" },
+    opts = function()
+      local ai = require("mini.ai")
+      return {
+        n_lines = 500,
+        custom_textobjects = {
+          o = ai.gen_spec.treesitter({
+            a = { "@block.outer", "@conditional.outer", "@loop.outer" },
+            i = { "@block.inner", "@conditional.inner", "@loop.inner" },
+          }),
+          f = ai.gen_spec.treesitter({ a = "@function.outer", i = "@function.inner" }),
+          c = ai.gen_spec.treesitter({ a = "@class.outer", i = "@class.inner" }),
+          t = { "<([%p%w]-)%f[^<%w][^<>]->.-</%1>", "^<.->().*()</[^/]->$" },
+          d = { "%f[%d]%d+" },
+          e = {
+            {
+              "%u[%l%d]+%f[^%l%d]",
+              "%f[%S][%l%d]+%f[^%l%d]",
+              "%f[%P][%l%d]+%f[^%l%d]",
+              "^[%l%d]+%f[^%l%d]",
+            },
+            "^().*()$",
+          },
+          g = function() return { from = 1, to = vim.fn.line("$") } end,
+          u = ai.gen_spec.function_call(),
+          U = ai.gen_spec.function_call({ name_pattern = "[%w_]" }),
         },
       }
-
-      return opts
+    end,
+    config = function(_, opts)
+      require("mini.ai").setup(opts)
     end,
   },
   {
+    "folke/lazydev.nvim",
+    ft = "lua",
+    cmd = "LazyDev",
+    opts = {
+      library = {
+        { path = "${3rd}/luv/library", words = { "vim%.uv" } },
+      },
+    },
+  },
+    {
     "stevearc/conform.nvim",
     event = { "BufWritePre" },
     cmd = { "ConformInfo" },

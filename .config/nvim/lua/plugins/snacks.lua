@@ -1,5 +1,4 @@
-return {
-
+return{
   {
     "snacks.nvim",
     opts = {
@@ -54,5 +53,5 @@ return {
         desc = "Open explorer in current file directory",
       },
     },
-  },
+  }
 }
