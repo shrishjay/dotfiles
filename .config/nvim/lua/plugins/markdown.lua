@@ -7,8 +7,10 @@ return {
       "folke/snacks.nvim",
     },
   },
-  {
-    "vimwiki/vimwiki",
-    event="VeryLazy"
-  }
+{
+  'MeanderingProgrammer/render-markdown.nvim',
+ft="markdown",
+  dependencies = { 'nvim-treesitter/nvim-treesitter' },            -- if you use the mini.nvim suite
+  opts = {},
+ },
 }

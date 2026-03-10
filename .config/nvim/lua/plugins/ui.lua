@@ -72,4 +72,8 @@ return {
       })
     end,
   },
+  {'junegunn/goyo.vim',
+event="VeryLazy",},
+{'junegunn/limelight.vim',
+event="VeryLazy",}
 }
