@@ -1,12 +1,13 @@
 return {
   {
-    "brianhuster/live-preview.nvim",
-    ft = "markdown",
-    dependencies = {
-      -- You can choose one of the following pickers
-      "folke/snacks.nvim",
-    },
-  },
+  "iamcco/markdown-preview.nvim",
+  cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
+  build = "cd app && yarn install",
+  init = function()
+    vim.g.mkdp_filetypes = { "markdown" }
+  end,
+  ft = { "markdown" },
+},
 {
   'MeanderingProgrammer/render-markdown.nvim',
 ft="markdown",

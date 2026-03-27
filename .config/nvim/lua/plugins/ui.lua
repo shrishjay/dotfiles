@@ -5,7 +5,7 @@ return {
     config = function()
       require("lualine").setup {
         options = {
-          theme = 'catppuccin',
+          theme = 'auto',
         },
       }
     end,
@@ -72,8 +72,4 @@ return {
       })
     end,
   },
-  {'junegunn/goyo.vim',
-event="VeryLazy",},
-{'junegunn/limelight.vim',
-event="VeryLazy",}
 }
