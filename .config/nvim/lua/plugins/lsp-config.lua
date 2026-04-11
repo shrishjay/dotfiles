@@ -40,12 +40,6 @@ return {
           },
         },
       })
-      vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
-        vim.lsp.diagnostic.on_publish_diagnostics, {
-          update_in_insert = false,
-          debounce_text_changes = 150,
-        }
-      )
       -- Keymaps
       local opts = { noremap = true, silent = true }
       vim.keymap.set("n", "<leader>cl", function() Snacks.picker.lsp_config() end, opts)
@@ -78,12 +72,6 @@ return {
           vim.bo[args.buf].completefunc = ""
         end,
       })
-      vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
-  vim.lsp.diagnostic.on_publish_diagnostics, {
-    update_in_insert = false,
-    debounce_text_changes = 10,
-  }
-)
     end,
   },
 }
