@@ -1,17 +1,8 @@
--- Keybindings in Lua
+
 
 local map = vim.keymap.set
 local opts = { noremap = true, silent = true }
 
--- Explorer
-map("n", "<leader>e", function()
-  Snacks.explorer()
-end, { desc = "Toggle Explorer" })
-
--- Live grep (Snacks picker)
-map("n", "<leader>fg", function()
-  Snacks.picker.grep()
-end, { desc = "Live Grep" })
 
 -- Insert mode escape
 map("i", "jk", "<Esc>", opts)
@@ -24,20 +15,19 @@ map("v", "<leader>p", '"+p', opts)
 map("n", "<leader>bn", "<cmd>bnext<CR>", opts)
 map("n", "<leader>bp", "<cmd>bprev<CR>", opts)
 map("n", "<leader>bd", "<cmd>bd<CR>", opts)
-
 map("n", "<leader>bb", function()
-  Snacks.picker.buffers()
+  require("mini.pick").builtin.buffers()
 end, { desc = "Buffers" })
 
--- Find files
+-- Find
 map("n", "<leader>ff", function()
-  Snacks.picker.files()
+  require("mini.pick").builtin.files()
 end, { desc = "Find Files" })
 
--- Recent files
 map("n", "<leader>fr", function()
-  Snacks.picker.recent()
+  require("mini.extra").pickers.oldfiles()
 end, { desc = "Recent Files" })
 
--- Lazygit
-map("n", "<leader>gg", "<cmd>Lazygit<CR>", opts)
+map("n", "<leader>fg", function()
+  require("mini.pick").builtin.grep_live()
+end, { desc = "Live Grep" })

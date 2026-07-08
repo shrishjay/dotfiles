@@ -20,7 +20,6 @@ if status is-interactive # Commands to run in interactive sessions can go here
     # Aliases
     alias ls 'eza -la --icons'
     alias clear "printf '\033[2J\033[3J\033[1;1H'"
-    alias q 'qs -c ii'
     alias fzf 'fzf --preview="bat --color=always {}"'
     alias nfzf 'nvim (fzf --preview="bat --color=always {}")'
     alias y yazi

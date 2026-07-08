@@ -1,75 +1,58 @@
-return {
-  {
-    "nvim-lualine/lualine.nvim",
-    event = { "BufReadPost", "BufNewFile" },
-    config = function()
-      require("lualine").setup {
-        options = {
-          theme = 'auto',
-        },
-      }
-    end,
+require("lualine").setup({
+    options = {
+        theme = "auto",
+    },
+})
+require("oil").setup()
+-- ── nvim-bufferline.lua ───────────────────────────────────────────────
+require("bufferline").setup()
+local wilder = require("wilder")
+wilder.setup({ modes = { ":", "/", "?" } })
+wilder.set_option("renderer", wilder.popupmenu_renderer({
+    border     = "rounded",
+    max_height = 10,
+}))
+wilder.set_option("pipeline", {
+    wilder.branch(
+        wilder.cmdline_pipeline({
+            fuzzy = 1,
+        })
+    ),
+})
+require("mini.surround").setup()
+require("mini.pairs").setup()
+require("mini.files").setup()
+vim.keymap.set("n", "<leader>e", function()
+  local mf = require("mini.files")
+  if not mf.close() then
+    mf.open(vim.api.nvim_buf_get_name(0))
+  end
+end, { desc = "Toggle Explorer" })
+-- ── mini.clue ─────────────────────────────────────────────────────────
+local miniclue = require("mini.clue")
+
+miniclue.setup({
+  triggers = {
+    { mode = "n", keys = "<leader>" },
+    { mode = "x", keys = "<leader>" },
+    { mode = "n", keys = "g" },
+    { mode = "n", keys = "z" },
+    { mode = "n", keys = "'" },
+    { mode = "n", keys = "`" },
+    { mode = "n", keys = '"' },
+    { mode = "i", keys = "<C-x>" },
+    { mode = "i", keys = "<C-r>" },
+    { mode = "c", keys = "<C-r>" },
   },
-  {
-  "akinsho/nvim-bufferline.lua",
-  event = { "BufReadPost", "BufNewFile" },
-  dependencies = { "nvim-tree/nvim-web-devicons" },  -- For buffer icons
-    config=true
-},
-{
-  "folke/trouble.nvim",
-  opts = {}, -- for default options, refer to the configuration section for custom setup.
-  cmd = "Trouble",
-  keys = {
-    {
-      "<leader>xx",
-      "<cmd>Trouble diagnostics toggle<cr>",
-      desc = "Diagnostics (Trouble)",
-    },
-    {
-      "<leader>xX",
-      "<cmd>Trouble diagnostics toggle filter.buf=0<cr>",
-      desc = "Buffer Diagnostics (Trouble)",
-    },
-    {
-      "<leader>cs",
-      "<cmd>Trouble symbols toggle focus=false<cr>",
-      desc = "Symbols (Trouble)",
-    },
-    {
-      "<leader>cl",
-      "<cmd>Trouble lsp toggle focus=false win.position=right<cr>",
-      desc = "LSP Definitions / references / ... (Trouble)",
-    },
-    {
-      "<leader>xL",
-      "<cmd>Trouble loclist toggle<cr>",
-      desc = "Location List (Trouble)",
-    },
-    {
-      "<leader>xQ",
-      "<cmd>Trouble qflist toggle<cr>",
-      desc = "Quickfix List (Trouble)",
-    },
+  clues = {
+    miniclue.gen_clues.builtin_completion(),
+    miniclue.gen_clues.g(),
+    miniclue.gen_clues.marks(),
+    miniclue.gen_clues.registers(),
+    miniclue.gen_clues.z(),
   },
-},
-  {
-    "gelguy/wilder.nvim",
-    event = "CmdlineEnter",
-    config = function()
-      local wilder = require("wilder")
-      wilder.setup({ modes = { ":","/","?" } })
-          wilder.set_option("renderer", wilder.popupmenu_renderer({
-        border = "rounded",
-        max_height = 10,
-      }))
-      wilder.set_option("pipeline", {
-        wilder.branch(
-          wilder.cmdline_pipeline({
-            fuzzy = 1,  -- Enable fuzzy matching
-          })
-        ),
-      })
-    end,
+  window = {
+    delay = 100,
+    config = { border = "rounded" },
   },
-}
+})

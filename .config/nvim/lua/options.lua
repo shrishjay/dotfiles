@@ -19,3 +19,7 @@ vim.keymap.set('n', '<leader>h', ':nohlsearch<CR>')
 vim.wo.number = true
 vim.opt.wrap = true
 vim.opt.linebreak = true
+vim.opt.relativenumber=true
+vim.opt.wrap = true
+vim.opt.linebreak = true
+vim.opt.undofile = true

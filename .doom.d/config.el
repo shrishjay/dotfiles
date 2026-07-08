@@ -63,14 +63,14 @@
         :n "n"   #'pdf-view-next-page
         :n "p"   #'pdf-view-previous-page))
 
-(use-package! treesit
-  :config
-  ;; Automatically use tree-sitter modes when available
-  (setq treesit-font-lock-level 4) ;; Maximum highlighting detail
+;; (use-package! treesit
+;;   :config
+;;   ;; Automatically use tree-sitter modes when available
+;;   (setq treesit-font-lock-level 4) ;; Maximum highlighting detail
   
-  ;; Remap major modes to their tree-sitter variants
-  (setq major-mode-remap-alist
-        '((python-mode . python-ts-mode))))
+;;   ;; Remap major modes to their tree-sitter variants
+;;   (setq major-mode-remap-alist
+;;         '((python-mode . python-ts-mode))))
 
 (map! :leader
       :desc "Open vterm"
