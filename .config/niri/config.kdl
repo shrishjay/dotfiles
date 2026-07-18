@@ -345,7 +345,7 @@ binds {
     }
 
     // Custom App Shortcuts
-    Mod+d { spawn "helium-browser"; }
+    Mod+d { spawn "brave-origin"; }
     Mod+E { spawn "nautilus"; }
 
     // Keys consist of modifiers separated by + signs, followed by an XKB key name
@@ -625,4 +625,4 @@ binds {
     Mod+z { spawn-sh "qs -c noctalia-shell ipc call wallpaper toggle"; }
 }
 
-window-rule { match app-id=r"helium-browser"; open-maximized true; }
+// window-rule { match app-id=r"brave-origin"; open-maximized true; }
