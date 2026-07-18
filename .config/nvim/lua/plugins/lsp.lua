@@ -16,8 +16,6 @@ vim.lsp.config("lua_ls", {
             diagnostics = {
                 globals = { "vim" }}}}
               })
-
-
 -- vim.api.nvim_create_autocmd("LspAttach", {
 --  callback = function(ev)
 --    local client = assert(vim.lsp.get_client_by_id(ev.data.client_id))
@@ -30,12 +28,34 @@ vim.lsp.config("lua_ls", {
 -- vim.opt.completeopt = { "menuone", "noselect", "popup","nosort","fuzzy" }
 vim.opt.pumheight = 15
 vim.opt.pumborder = "rounded"
-require("mini.completion").setup({
-    lsp_completion = {
-        auto_setup = true,
-    }
+require("blink.cmp").setup({
+  fuzzy = {
+    implementation = "lua",
+  },
+  keymap = {
+    preset = "default",
+    ["<Tab>"]   = { "select_next", "snippet_forward", "fallback" },
+    ["<S-Tab>"] = { "select_prev", "snippet_backward", "fallback" },
+    ["<CR>"]    = { "accept", "fallback" },
+  },
+  completion = {
+    menu = { border = "rounded" },
+    documentation = {
+      auto_show = true,
+      window = { border = "rounded" },
+    },
+  },
+  signature = {
+    enabled = true,
+    window = {
+      border = "rounded",
+      direction_priority = { "n", "s" },
+    },
+  },
+  sources = {
+    default = { "lsp", "path", "snippets", "buffer" },
+  },
 })
-
 --- mini snippets ---
 local MiniSnippets = require("mini.snippets")
 MiniSnippets.setup({
