@@ -3,7 +3,12 @@ require("lualine").setup({
         theme = "auto",
     },
 })
-require("oil").setup()
+require("oil").setup({
+  view_options = {
+    show_hidden = true,
+  },
+})
+vim.keymap.set("n", "<leader>o", "<cmd>Oil<CR>", { desc = "Open Oil" })
 -- ── nvim-bufferline.lua ───────────────────────────────────────────────
 require("bufferline").setup()
 local wilder = require("wilder")

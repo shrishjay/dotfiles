@@ -1,6 +1,6 @@
 // Set the overview wallpaper on the backdrop.
 layer-rule {
-  match namespace="^noctalia-overview*"
+  match namespace="noctalia-backdrop"
   place-within-backdrop true
 
 }
@@ -234,7 +234,8 @@ layout {
 // See the binds section below for more spawn examples.
 
 // This line starts waybar, a commonly used bar for Wayland compositors.
-spawn-at-startup "env" "QT_QPA_PLATFORMTHEME=gtk3" "qs" "-c" "noctalia-shell"
+spawn-at-startup "noctalia"
+// spawn-at-startup "env" "QT_QPA_PLATFORMTHEME=gtk3" "qs" "-c" "noctalia-shell"
 // To run a shell command (with variables, pipes, etc.), use spawn-sh-at-startup:
 spawn-sh-at-startup "QT_QPA_PLATFORMTHEME=gtk3 qs -c ~/.config/quickshell/noctalia-shell"
 spawn-sh-at-startup "pkill -9 wl-paste; /usr/bin/wl-paste --watch /usr/bin/cliphist store"
@@ -341,7 +342,7 @@ binds {
     
 
  Mod+a {
-        spawn-sh "qs -c noctalia-shell ipc call launcher toggle"
+        spawn-sh "noctalia msg panel-toggle launcher"
     }
 
     // Custom App Shortcuts
@@ -621,8 +622,8 @@ binds {
     // Powers off the monitors. To turn them back on, do any input like
     // moving the mouse or pressing any other key.
     Mod+Shift+P { power-off-monitors; }
-    Mod+s { spawn-sh "qs -c noctalia-shell ipc call settings toggle"; }
-    Mod+z { spawn-sh "qs -c noctalia-shell ipc call wallpaper toggle"; }
+    Mod+s { spawn-sh "settings-toggle"; }
+    Mod+z { spawn-sh "noctalia msg panel-toggle wallpaper"; }
 }
 
 // window-rule { match app-id=r"brave-origin"; open-maximized true; }
